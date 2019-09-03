@@ -37,7 +37,7 @@ while welcome_menu_open
     system "clear"
     finished_adding_cards = false
     until finished_adding_cards
-      puts new_deck.title
+      puts "Deck: #{new_deck.title}"
       puts "\n\n"
       puts "Card #{new_deck.cards.length + 1}"
       puts "\n\n"
@@ -108,7 +108,7 @@ while welcome_menu_open
           puts "\n"
           puts "Would you like to add, edit or delete? Enter the number on the left"
           puts "\n"
-          puts "(1) Add\n(2) Edit\n(3) Delete"
+          puts "(1) Add Card\n(2) Edit Card\n(3) Delete Card\n(4) Edit Deck Title"
           puts "\nTo exit, hit the escape key once then press enter/return"
           input = gets.chomp
 
@@ -175,8 +175,18 @@ while welcome_menu_open
                 end
               end
             end
-
-            
+          when "4"
+            # EDIT DECK TITLE #
+            system "clear"
+            puts "Deck: #{edited_deck.title}"
+            puts "\n"
+            puts "Enter new deck title:"
+            new_deck_title = gets.chomp
+            edited_deck.title = new_deck_title
+            database[deck_number.to_i - 1] = edited_deck.return_deck
+            Database.save(database)
+            database = Database.get
+            system "clear"
           when "\e"
             system "clear"
             edited_deck = false
