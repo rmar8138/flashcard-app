@@ -1,27 +1,8 @@
 require_relative "./classes/Deck"
 require_relative "./modules/Database"
+require_relative "./methods/methods"
 
 database = Database.get
-
-def add_deck
-  puts "Please enter a title for the deck"
-  title = gets.chomp
-
-  Deck.new(title)
-end
-
-def add_card(deck)
-  puts deck.title
-  puts "\n\n"
-  puts "Card #{deck.cards.length + 1}"
-  puts "\n\n"
-  puts "Enter the question"
-  question = gets.chomp
-  puts "Enter the answer"
-  answer = gets.chomp
-
-  deck.add_card({ question: question, answer: answer })
-end
 
 welcome_menu_open = true
 
@@ -79,6 +60,7 @@ while welcome_menu_open
         when "n"
           add_another_card_prompt_open = false
           finished_adding_cards = true
+          system "clear"
         else
           puts "Invalid input"
         end
@@ -97,8 +79,8 @@ while welcome_menu_open
     edit_menu_open = true
 
     while edit_menu_open
+      puts "Decks:"
       database.each_with_index do |deck, index|
-        puts "Decks:"
         puts "(#{index + 1}) #{deck[:title]}: #{deck[:cards].length} card(s)"
       end
   
@@ -129,11 +111,13 @@ while welcome_menu_open
 
           case input
           when "1"
+            # ADD NEW CARD TO EXISTING DECK #
             add_card(edited_deck)
             database[deck_number.to_i - 1] = edited_deck.return_deck
             Database.save(database)
             database = Database.get
           when "2"
+            # EDIT EXISTING CARD IN EXISTING DECK #
           when "\e"
             system "clear"
             edited_deck = false

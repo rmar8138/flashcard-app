@@ -1,18 +1,1 @@
-[
-  {
-    "title": "test",
-    "cards": [
-      { "question": "1", "answer": "1" },
-      { "question": "2", "answer": "2" },
-      { "question": "ADDED", "answer": "hell yeah" },
-      { "question": "asdf", "answer": "asd" },
-      { "question": "fv", "answer": "sf" },
-      { "question": "6", "answer": "6" },
-      { "question": "7", "answer": "7" }
-    ]
-  },
-  {
-    "title": "Japanese",
-    "cards": [{ "question": "What is this kanji?", "answer": "I don't know" }]
-  }
-]
+[{"title":"test","cards":[{"question":"1","answer":"1"},{"question":"2","answer":"2"},{"question":"ADDED","answer":"hell yeah"},{"question":"asdf","answer":"asd"},{"question":"fv","answer":"sf"},{"question":"6","answer":"6"},{"question":"7","answer":"7"}]},{"title":"Japanese","cards":[{"question":"What is this kanji?","answer":"I don't know"}]},{"title":"French","cards":[{"question":"baguette?","answer":"hohohoh baguette"}]},{"title":"Ruby","cards":[{"question":"Is this true? true == true","answer":"yes"},{"question":"Is this even a question mate","answer":"Yeah nah yeah nah"}]}]
