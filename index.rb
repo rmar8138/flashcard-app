@@ -1,4 +1,8 @@
 require_relative "./classes/Deck"
+require_relative "./modules/Database"
+
+database = Database.get
+p database
 
 def add_deck
   puts "Please enter a title for the deck"
@@ -10,7 +14,10 @@ end
 welcome_menu_open = true
 
 while welcome_menu_open
-  # WELCOME SCREEN
+  ##################
+  # WELCOME SCREEN #
+  ##################
+
   puts "\n\n\n"
   puts "Welcome to the terminal flash card app!"
   puts "\n\n"
@@ -28,6 +35,10 @@ while welcome_menu_open
 
     welcome_menu_open = false
   when "2"
+    ############
+    # ADD DECK #
+    ############
+
     system "clear"
     new_deck = add_deck
     
@@ -61,17 +72,28 @@ while welcome_menu_open
           puts "Invalid input"
         end
       end
-      
-      p new_deck.cards
     end
+    database[new_deck.title.to_sym] = {
+      title: new_deck.title,
+      cards: new_deck.cards
+    }
+    Database.save(database)
 
     welcome_menu_open = false
   when "3"
+    #############
+    # EDIT DECK #
+    #############
+
     system "clear"
     puts "Edit!"
 
     welcome_menu_open = false
   when "4"
+    ############
+    # SETTINGS #
+    ############
+
     system "clear"
     puts "Settings!"
 

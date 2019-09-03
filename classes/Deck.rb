@@ -2,9 +2,9 @@ class Deck
   attr_accessor :title
   attr_reader :cards
 
-  def initialize(title)
+  def initialize(title, cards = [])
     @title = title
-    @cards = []
+    @cards = cards
   end
 
   def add_card(card)
