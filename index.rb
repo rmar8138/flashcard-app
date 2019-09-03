@@ -31,8 +31,11 @@ while welcome_menu_open
     system "clear"
     new_deck = add_deck
     
+    system "clear"
     finished_adding_cards = false
     until finished_adding_cards
+      puts new_deck.title
+      puts "\n\n"
       puts "Card #{new_deck.cards.length + 1}"
       puts "\n\n"
       puts "Enter the question"
@@ -49,6 +52,7 @@ while welcome_menu_open
         
         case input
         when "y"
+          system "clear"
           add_another_card_prompt_open = false
         when "n"
           add_another_card_prompt_open = false
