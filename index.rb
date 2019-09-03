@@ -2,7 +2,6 @@ require_relative "./classes/Deck"
 require_relative "./modules/Database"
 
 database = Database.get
-p database
 
 def add_deck
   puts "Please enter a title for the deck"
@@ -73,22 +72,45 @@ while welcome_menu_open
         end
       end
     end
-    database[new_deck.title.to_sym] = {
+    database.push({
       title: new_deck.title,
       cards: new_deck.cards
-    }
+    })
     Database.save(database)
 
-    welcome_menu_open = false
+    next
   when "3"
     #############
     # EDIT DECK #
     #############
 
     system "clear"
-    puts "Edit!"
+    edit_menu_open = true
 
-    welcome_menu_open = false
+    while edit_menu_open
+      database.each_with_index do |deck, index|
+        puts "(#{index + 1}) #{deck[:title]}: #{deck[:cards].length} card(s)"
+      end
+  
+      puts "\n\n"
+      puts "Which deck would you like to edit? Enter the number on the left"
+      puts "Enter 'exit' to go back to the main menu"
+  
+      deck_number = gets.chomp
+  
+      if deck_number == "exit"
+        system "clear"
+        edit_menu_open = false
+      elsif deck_number.to_i <= 0 || deck_number.to_i > database.length
+        system "clear"
+        puts "Invalid input"
+        next
+      else
+        puts "WOOOOOOO"
+      end
+
+    end
+
   when "4"
     ############
     # SETTINGS #

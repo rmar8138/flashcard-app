@@ -1,9 +1,16 @@
-{
-  "test": {
+[
+  {
     "title": "test",
     "cards": [
-      { "question": "1", "answer": "one" },
-      { "question": "2", "answer": "two" }
+      { "question": "1", "answer": "1" },
+      { "question": "2", "answer": "2" }
+    ]
+  },
+  {
+    "title": "test 2",
+    "cards": [
+      { "question": "2", "answer": "2" },
+      { "question": "2", "answer": "2" }
     ]
   }
-}
+]
