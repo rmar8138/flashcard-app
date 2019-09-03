@@ -1,4 +1,13 @@
+require_relative "./classes/Deck"
 
+def new_deck
+  puts "Please enter a title for the deck"
+  title = gets.chomp
+
+  new_deck = Deck.new(title)
+  p new_deck.title
+  p new_deck.cards
+end
 
 welcome_menu_open = true
 
@@ -22,7 +31,7 @@ while welcome_menu_open
     welcome_menu_open = false
   when "2"
     system "clear"
-    puts "Add!"
+    new_deck
 
     welcome_menu_open = false
   when "3"
