@@ -8,14 +8,27 @@ def add_deck
 end
 
 def add_card(deck)
-  puts deck.title
-  puts "\n\n"
+  puts "Deck: #{deck.title}"
   puts "Card #{deck.cards.length + 1}"
-  puts "\n\n"
+  puts " \n"
   puts "Enter the question"
   question = gets.chomp
   puts "Enter the answer"
   answer = gets.chomp
 
   deck.add_card({ question: question, answer: answer })
+end
+
+def display_card(card)
+  puts "Question: #{card[:question]}"
+  puts "Answer: #{card[:answer]}"
+  puts "\n\n"
+end
+
+def display_cards(deck)
+  deck.cards.each_with_index do |card, index|
+    puts "(#{index + 1}) Question: #{card[:question]}"
+    puts "Answer: #{card[:answer]}"
+    puts "\n\n"
+  end
 end

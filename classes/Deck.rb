@@ -17,7 +17,7 @@ class Deck
     return @cards
   end
 
-  def delete_card(card, index)
+  def delete_card(index)
     @cards.delete_at(index)
     return @cards
   end

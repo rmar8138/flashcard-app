@@ -103,21 +103,80 @@ while welcome_menu_open
         editing_deck = true
 
         while editing_deck
-          puts "Would you like to add a card or edit? Enter the number on the left"
-          puts "\n\n"
-          puts "(1) Add\n(2) Edit"
+          puts "Deck: #{edited_deck.title}" 
+          puts "Cards: #{edited_deck.cards.length} card(s)"
+          puts "\n"
+          puts "Would you like to add, edit or delete? Enter the number on the left"
+          puts "\n"
+          puts "(1) Add\n(2) Edit\n(3) Delete"
           puts "\nTo exit, hit the escape key once then press enter/return"
           input = gets.chomp
 
           case input
           when "1"
             # ADD NEW CARD TO EXISTING DECK #
+            system "clear"
+
             add_card(edited_deck)
             database[deck_number.to_i - 1] = edited_deck.return_deck
             Database.save(database)
             database = Database.get
+
+            system "clear"
+            editing_deck = false
           when "2"
             # EDIT EXISTING CARD IN EXISTING DECK #
+          when "3"
+            # DELETE EXISTING CARD FROM EXISTING DECK #
+            if edited_deck.cards.length == 0
+              system "clear"
+              puts "No cards in this deck to delete!"
+              puts "\n"
+              next
+            else
+              system "clear"
+  
+              deleting_card = true
+  
+              while deleting_card
+                display_cards(edited_deck)
+                puts "Which card would you like to delete? Enter the number to the left"
+                card_number = gets.chomp
+  
+                if card_number.to_i <= 0 || card_number.to_i > edited_deck.cards.length
+                  system "clear"
+                  puts "Invalid input"
+                  next
+                else
+                  system "clear"
+
+                  puts "Are you sure you want to delete this card? (y/n)"
+                  puts "\n"
+                  display_card(edited_deck.cards[card_number.to_i - 1])
+                  input = gets.chomp
+  
+                  case input
+                  when "y"
+                    edited_deck.delete_card(card_number.to_i - 1)
+                    database[deck_number.to_i - 1] = edited_deck.return_deck
+                    Database.save(database)
+                    database = Database.get
+  
+                    deleting_card = false
+                    system "clear"
+                  when "n"
+                    system "clear"
+                    next
+                  else
+                    system "clear"
+                    puts "Invalid input"
+                    next
+                  end
+                end
+              end
+            end
+
+            
           when "\e"
             system "clear"
             edited_deck = false
