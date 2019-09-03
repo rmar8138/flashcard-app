@@ -21,4 +21,8 @@ class Deck
     @cards.delete_at(index)
     return @cards
   end
+
+  def return_deck
+    return { title: @title, cards: @cards }
+  end
 end

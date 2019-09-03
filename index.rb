@@ -10,24 +10,36 @@ def add_deck
   Deck.new(title)
 end
 
+def add_card(deck)
+  puts deck.title
+  puts "\n\n"
+  puts "Card #{deck.cards.length + 1}"
+  puts "\n\n"
+  puts "Enter the question"
+  question = gets.chomp
+  puts "Enter the answer"
+  answer = gets.chomp
+
+  deck.add_card({ question: question, answer: answer })
+end
+
 welcome_menu_open = true
 
 while welcome_menu_open
   ##################
   # WELCOME SCREEN #
   ##################
-
-  puts "\n\n\n"
   puts "Welcome to the terminal flash card app!"
   puts "\n\n"
   puts "Please select an option by typing in the number to the left:"
   puts "\n\n"
-  puts "(1) Review\n(2) Add deck\n(3) Edit deck\n(4) Settings\n(5) Exit"
+  puts "(1) Review\n(2) Add deck\n(3) Edit deck\n(4) Settings\n"
+  puts "\nTo exit, hit the escape key once then press enter/return"
   puts "\n\n\n"
 
-  option = gets.chomp
-
-  case option
+  input = gets.chomp
+  p input
+  case input
   when "1"
     system "clear"
     puts "Review!"
@@ -72,10 +84,7 @@ while welcome_menu_open
         end
       end
     end
-    database.push({
-      title: new_deck.title,
-      cards: new_deck.cards
-    })
+    database.push(new_deck.return_deck)
     Database.save(database)
 
     next
@@ -89,16 +98,17 @@ while welcome_menu_open
 
     while edit_menu_open
       database.each_with_index do |deck, index|
+        puts "Decks:"
         puts "(#{index + 1}) #{deck[:title]}: #{deck[:cards].length} card(s)"
       end
   
       puts "\n\n"
       puts "Which deck would you like to edit? Enter the number on the left"
-      puts "Enter 'exit' to go back to the main menu"
+      puts "\nTo exit, hit the escape key once then press enter/return"
   
       deck_number = gets.chomp
   
-      if deck_number == "exit"
+      if deck_number == "\e"
         system "clear"
         edit_menu_open = false
       elsif deck_number.to_i <= 0 || deck_number.to_i > database.length
@@ -106,7 +116,34 @@ while welcome_menu_open
         puts "Invalid input"
         next
       else
-        puts "WOOOOOOO"
+        system "clear"
+        edited_deck = Deck.new(database[deck_number.to_i - 1][:title], database[deck_number.to_i - 1][:cards])
+        editing_deck = true
+
+        while editing_deck
+          puts "Would you like to add a card or edit? Enter the number on the left"
+          puts "\n\n"
+          puts "(1) Add\n(2) Edit"
+          puts "\nTo exit, hit the escape key once then press enter/return"
+          input = gets.chomp
+
+          case input
+          when "1"
+            add_card(edited_deck)
+            database[deck_number.to_i - 1] = edited_deck.return_deck
+            Database.save(database)
+            database = Database.get
+          when "2"
+          when "\e"
+            system "clear"
+            edited_deck = false
+            break
+          else
+            system "clear"
+            puts "Invalid input"
+            next
+          end
+        end
       end
 
     end
@@ -120,13 +157,14 @@ while welcome_menu_open
     puts "Settings!"
 
     welcome_menu_open = false
-  when "5"
+  when "\e"
     system "clear"
     puts "Cya!"
 
     welcome_menu_open = false
   else
     system "clear"
+    p input
     puts "Invalid input, please try again"
     next
   end
