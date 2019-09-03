@@ -108,7 +108,7 @@ while welcome_menu_open
           puts "\n"
           puts "Would you like to add, edit or delete? Enter the number on the left"
           puts "\n"
-          puts "(1) Add Card\n(2) Edit Card\n(3) Delete Card\n(4) Edit Deck Title"
+          puts "(1) Add Card\n(2) Edit Card\n(3) Delete Card\n(4) Edit Deck Title\n(5) Delete Deck"
           puts "\nTo exit, hit the escape key once then press enter/return"
           input = gets.chomp
 
@@ -187,6 +187,34 @@ while welcome_menu_open
             Database.save(database)
             database = Database.get
             system "clear"
+          when "5"
+            # DELETE DECK #
+            system "clear"
+            puts "Deck: #{edited_deck.title}"
+            puts "\n"
+            puts "Are you sure you want to delete this deck? (y/n)"
+            input = gets.chomp
+
+            case input
+            when "y"
+              database.delete_at(deck_number.to_i - 1)
+              system "clear"
+
+              Database.save(database)
+              database = Database.get
+              system "clear"
+
+              editing_deck = false
+              next
+            when "n"
+              system "clear"
+              next
+            else
+              system "clear"
+              puts "Invalid input"
+              next
+            end
+
           when "\e"
             system "clear"
             edited_deck = false
