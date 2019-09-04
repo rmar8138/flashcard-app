@@ -7,6 +7,14 @@ def add_deck
   Deck.new(title)
 end
 
+def display_decks(decks)
+  puts "Decks:"
+  puts "\n"
+  decks.each_with_index do |deck, index|
+    puts "(#{index + 1}) #{deck[:title]}: #{deck[:cards].length} card(s)"
+  end
+end
+
 def add_card(deck)
   puts "Deck: #{deck.title}"
   puts "Card #{deck.cards.length + 1}"
