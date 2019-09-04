@@ -1,4 +1,5 @@
 require_relative "./classes/Deck"
+require_relative "./classes/Review"
 require_relative "./modules/Database"
 require_relative "./methods/methods"
 
@@ -34,6 +35,17 @@ while welcome_menu_open
       puts "Which deck would you like to review? Enter the number to the left"
       display_decks(database)
       deck_number = gets.chomp
+
+      if deck_number.to_i <= 0 || deck_number.to_i > database.length
+        system "clear"
+        puts "Invalid deck number"
+        next
+      else
+        # START REVIEW! #
+        review = Review.new(database[deck_number.to_i - 1])
+        review.start_review
+      end
+
     end
   when "2"
     ############

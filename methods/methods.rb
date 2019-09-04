@@ -13,6 +13,7 @@ def display_decks(decks)
   decks.each_with_index do |deck, index|
     puts "(#{index + 1}) #{deck[:title]}: #{deck[:cards].length} card(s)"
   end
+  puts "\n"
 end
 
 def add_card(deck)
