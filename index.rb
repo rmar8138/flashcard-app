@@ -1,3 +1,4 @@
+require "tty-prompt"
 require "tty-box"
 require "tty-table"
 require_relative "./classes/Deck"
@@ -6,6 +7,7 @@ require_relative "./modules/Database"
 require_relative "./methods/methods"
 
 database = Database.get
+prompt = TTY::Prompt.new
 
 welcome_menu_open = true
 
@@ -13,19 +15,12 @@ while welcome_menu_open
   ##################
   # WELCOME SCREEN #
   ##################
+
   puts "Welcome to the terminal flash card app!"
   puts "\n\n"
-  puts "Please select an option by typing in the number to the left:"
-  puts "\n\n"
-  puts "(1) Review\n(2) Add deck\n(3) Edit deck\n(4) Settings\n"
-  puts "\n\n"
-  puts "To exit, hit the escape key once then press enter/return"
-  puts "\n\n\n"
-
-  input = gets.chomp
-  p input
+  input = prompt.select("Please select an option:", ["Review", "Add Deck", "Edit Deck", "Settings", "Exit"], cycle: true)
   case input
-  when "1"
+  when "Review"
     ###############
     # DECK REVIEW #
     ###############
@@ -43,29 +38,26 @@ while welcome_menu_open
     end
 
     while review_menu_open
-      puts "Which deck would you like to review? Enter the number to the left"
-      puts "Hit the esc key and press enter/return to go back"
-      display_decks(database)
-      deck_number = gets.chomp
-
-      if deck_number == "\e"
-        review_menu_open = false
-        next
-      elsif deck_number.to_i <= 0 || deck_number.to_i > database.length
-        system "clear"
-        puts "Invalid deck number"
-        next
-      else
-        # START REVIEW! #
-        review = Review.new(database[deck_number.to_i - 1])
-        review.start_review
-
-        review_menu_open = false
-        next
+      deck = prompt.select("Which deck would you like to review?", per_page: 8) do |menu|
+        menu.enum "."
+        count = 0
+        for deck in database
+          menu.choice({deck[:title] => count})
+          count += 1
+        end
+        menu.choice("Return to menu")
       end
 
+      # START REVIEW! #
+      review = Review.new(database[deck])
+      review.start_review
+
+      review_menu_open = false
+      next
     end
-  when "2"
+
+  
+  when "Add Deck"
     ############
     # ADD DECK #
     ############
@@ -119,7 +111,7 @@ while welcome_menu_open
     Database.save(database)
 
     next
-  when "3"
+  when "Edit Deck"
     #############
     # EDIT DECK #
     #############
@@ -345,7 +337,7 @@ while welcome_menu_open
 
     end
 
-  when "4"
+  when "Settings"
     ############
     # SETTINGS #
     ############
@@ -354,7 +346,7 @@ while welcome_menu_open
     puts "Settings!"
 
     welcome_menu_open = false
-  when "\e"
+  when "Exit"
     system "clear"
     puts "Cya!"
 
