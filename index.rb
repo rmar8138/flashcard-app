@@ -33,10 +33,14 @@ while welcome_menu_open
 
     while review_menu_open
       puts "Which deck would you like to review? Enter the number to the left"
+      puts "Hit the esc key and press enter/return to go back"
       display_decks(database)
       deck_number = gets.chomp
 
-      if deck_number.to_i <= 0 || deck_number.to_i > database.length
+      if deck_number == "\e"
+        review_menu_open = false
+        next
+      elsif deck_number.to_i <= 0 || deck_number.to_i > database.length
         system "clear"
         puts "Invalid deck number"
         next
@@ -44,6 +48,9 @@ while welcome_menu_open
         # START REVIEW! #
         review = Review.new(database[deck_number.to_i - 1])
         review.start_review
+
+        review_menu_open = false
+        next
       end
 
     end
