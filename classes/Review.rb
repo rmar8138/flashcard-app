@@ -1,4 +1,5 @@
 require "tty-box"
+require "tty-table"
 
 class Review
   attr_accessor :deck
@@ -40,37 +41,40 @@ class Review
       input = gets.chomp
 
       system "clear"
+      case input
+      when "1"
+      user_viewing_answer = true
+
+      while user_viewing_answer
+        puts "Deck: #{@deck[:title]}"
+        puts "\n"
+        puts "To exit the review at any time, hit the esc key and press enter/return"
+        puts "\n\n"
+        puts answer_box
+        puts "\n\n"
+        puts "Enter the number to the left of the appropriate outcome"
+        puts "\n"
+        puts "(1) Correct\n(2) Incorrect"
+        input = gets.chomp
         case input
         when "1"
-        user_viewing_answer = true
-        while user_viewing_answer
-          puts "Deck: #{@deck[:title]}"
-          puts "\n"
-          puts "To exit the review at any time, hit the esc key and press enter/return"
-          puts "\n\n"
-          puts answer_box
-          puts "\n\n"
-          puts "Enter the number to the left of the appropriate outcome"
-          puts "\n"
-          puts "(1) Correct\n(2) Incorrect"
-          input = gets.chomp
-          case input
-          when "1"
-            @score += 1 if first_review == true
-            user_viewing_answer = false
-            next
-          when "2"
-            # add card to review_after deck #
-            @number_of_incorrect_cards += 1
-            review_after_deck.push(shuffled_deck[@current_card])
-            user_viewing_answer = false
-            next
-          else
-            system "clear"
-            puts "Invalid input"
-            next
-          end
+          @score += 1 if first_review == true
+          user_viewing_answer = false
+          system "clear"
+          next
+        when "2"
+          # add card to review_after deck #
+          @number_of_incorrect_cards += 1
+          review_after_deck.push(shuffled_deck[@current_card])
+          user_viewing_answer = false
+          system "clear"
+          next
+        else
+          system "clear"
+          puts "Invalid input"
+          next
         end
+      end
 
         # NEXT CARD #
         @current_card += 1
@@ -104,11 +108,14 @@ class Review
   end
 
   def show_statistics
+    table = TTY::Table.new ["Stats","Total"], [["Score", "#{@score}/#{@deck[:cards].length}"], ["Number of skips", " #{@number_of_skips}"], ["Incorrect cards", "#{@number_of_incorrect_cards}"]]
+
     puts "Here are your statistics for this review!"
     puts "\n"
-    puts "Score: #{@score}/#{@deck[:cards].length}"
-    puts "Number of skips: #{@number_of_skips}"
-    puts "Number of incorrectly guessed cards: #{@number_of_incorrect_cards}"
+    puts table.render(:ascii, alignments: [:left, :center])
+    # puts "Score: #{@score}/#{@deck[:cards].length}"
+    # puts "Number of skips: #{@number_of_skips}"
+    # puts "Number of incorrectly guessed cards: #{@number_of_incorrect_cards}"
     puts "\n"
     puts "Enter any key to return to menu"
     input = gets.chomp

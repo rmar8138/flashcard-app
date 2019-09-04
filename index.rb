@@ -1,5 +1,5 @@
 require "tty-box"
-
+require "tty-table"
 require_relative "./classes/Deck"
 require_relative "./classes/Review"
 require_relative "./modules/Database"
@@ -18,7 +18,8 @@ while welcome_menu_open
   puts "Please select an option by typing in the number to the left:"
   puts "\n\n"
   puts "(1) Review\n(2) Add deck\n(3) Edit deck\n(4) Settings\n"
-  puts "\nTo exit, hit the escape key once then press enter/return"
+  puts "\n\n"
+  puts "To exit, hit the escape key once then press enter/return"
   puts "\n\n\n"
 
   input = gets.chomp
@@ -32,6 +33,14 @@ while welcome_menu_open
     system "clear"
     
     review_menu_open = true
+    if database.length == 0
+      system "clear"
+      puts "No decks to review! Please make a deck first"
+      puts "\n"
+
+      review_menu_open = false
+      next
+    end
 
     while review_menu_open
       puts "Which deck would you like to review? Enter the number to the left"

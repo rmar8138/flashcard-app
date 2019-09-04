@@ -1,3 +1,4 @@
+require "tty-table"
 require_relative "../classes/Deck"
 
 def add_deck
