@@ -38,7 +38,7 @@ while welcome_menu_open
     end
 
     while review_menu_open
-      deck = prompt.select("Which deck would you like to review?", per_page: 8) do |menu|
+      deck = prompt.select("Which deck would you like to review?", per_page: 8, cycle: true) do |menu|
         menu.enum "."
         count = 0
         for deck in database
@@ -46,6 +46,12 @@ while welcome_menu_open
           count += 1
         end
         menu.choice("Return to menu")
+      end
+
+      if deck == "Return to menu"
+        system "clear"
+        review_menu_open = false
+        next
       end
 
       # START REVIEW! #
@@ -64,41 +70,32 @@ while welcome_menu_open
 
     system "clear"
     
-    puts "Please enter a title for the deck"
-    puts "Hit the esc key and press enter/return to go back"
-    title = gets.chomp
-    
-    if title == "\e"
-      system "clear"
-      next
-    end
+    title = prompt.ask("Please enter a title for the deck:")
 
     new_deck = Deck.new(title)
     
     system "clear"
+
     finished_adding_cards = false
     until finished_adding_cards
       puts "Deck: #{new_deck.title}"
       puts "\n\n"
       puts "Card #{new_deck.cards.length + 1}"
       puts "\n\n"
-      puts "Enter the question"
-      question = gets.chomp
-      puts "Enter the answer"
-      answer = gets.chomp
+      question = prompt.ask("Enter the question:")
+      answer = prompt.ask("Enter the answer:")
 
       new_deck.add_card({ question: question, answer: answer })
 
       add_another_card_prompt_open = true
       while add_another_card_prompt_open
-        puts "Add another card? (y/n)"
-        input = gets.chomp
-        
-        case input
-        when "y"
+        add_another = prompt.select("Add another card?", [{ Yes: true }, { No: false }])
+
+        case add_another
+        when true
           system "clear"
           add_another_card_prompt_open = false
-        when "n"
+        when false
           add_another_card_prompt_open = false
           finished_adding_cards = true
           system "clear"
@@ -106,10 +103,18 @@ while welcome_menu_open
           puts "Invalid input"
         end
       end
+
     end
+
+    puts "New deck created!"
+    puts "#{new_deck.title}: #{new_deck.cards.length} card(s)"
+    puts "\n"
+    prompt.keypress("Press any key to save and return to menu")
+
     database.push(new_deck.return_deck)
     Database.save(database)
 
+    system "clear"
     next
   when "Edit Deck"
     #############
