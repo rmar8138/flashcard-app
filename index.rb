@@ -1,3 +1,5 @@
+require "tty-box"
+
 require_relative "./classes/Deck"
 require_relative "./classes/Review"
 require_relative "./modules/Database"
@@ -60,7 +62,17 @@ while welcome_menu_open
     ############
 
     system "clear"
-    new_deck = add_deck
+    
+    puts "Please enter a title for the deck"
+    puts "Hit the esc key and press enter/return to go back"
+    title = gets.chomp
+    
+    if title == "\e"
+      system "clear"
+      next
+    end
+
+    new_deck = Deck.new(title)
     
     system "clear"
     finished_adding_cards = false
