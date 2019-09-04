@@ -101,5 +101,9 @@ class Review
     puts "Number of skips: #{@number_of_skips}"
     puts "Number of incorrectly guessed cards: #{@number_of_incorrect_cards}"
     puts "\n"
+    puts "Enter any key to return to menu"
+    input = gets.chomp
+    system "clear"
+    return nil
   end
 end
