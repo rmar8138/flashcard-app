@@ -1,4 +1,5 @@
 require_relative "./classes/Deck"
+require_relative "./classes/Review"
 require_relative "./modules/Database"
 require_relative "./methods/methods"
 
@@ -22,10 +23,37 @@ while welcome_menu_open
   p input
   case input
   when "1"
+    ###############
+    # DECK REVIEW #
+    ###############
+    
     system "clear"
-    puts "Review!"
+    
+    review_menu_open = true
 
-    welcome_menu_open = false
+    while review_menu_open
+      puts "Which deck would you like to review? Enter the number to the left"
+      puts "Hit the esc key and press enter/return to go back"
+      display_decks(database)
+      deck_number = gets.chomp
+
+      if deck_number == "\e"
+        review_menu_open = false
+        next
+      elsif deck_number.to_i <= 0 || deck_number.to_i > database.length
+        system "clear"
+        puts "Invalid deck number"
+        next
+      else
+        # START REVIEW! #
+        review = Review.new(database[deck_number.to_i - 1])
+        review.start_review
+
+        review_menu_open = false
+        next
+      end
+
+    end
   when "2"
     ############
     # ADD DECK #
@@ -79,10 +107,7 @@ while welcome_menu_open
     edit_menu_open = true
 
     while edit_menu_open
-      puts "Decks:"
-      database.each_with_index do |deck, index|
-        puts "(#{index + 1}) #{deck[:title]}: #{deck[:cards].length} card(s)"
-      end
+      display_decks(database)
   
       puts "\n\n"
       puts "Which deck would you like to edit? Enter the number on the left"
