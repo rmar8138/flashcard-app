@@ -123,7 +123,7 @@ while welcome_menu_open
             database = Database.get
 
             system "clear"
-            editing_deck = false
+            next
           when "2"
             # EDIT EXISTING CARD IN EXISTING DECK #
           when "3"
@@ -215,6 +215,7 @@ while welcome_menu_open
     puts "Cya!"
 
     welcome_menu_open = false
+    next
   else
     system "clear"
     p input
