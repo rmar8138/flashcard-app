@@ -126,6 +126,76 @@ while welcome_menu_open
             next
           when "2"
             # EDIT EXISTING CARD IN EXISTING DECK #
+            system "clear"
+            display_cards(edited_deck)
+
+            puts "Which card would you like to edit? Enter the number to the left"
+            card_number = gets.chomp
+
+            if card_number.to_i <= 0 || card_number.to_i > edited_deck.cards.length
+              system "clear"
+              puts "Invalid input"
+              next
+            else
+              system "clear"
+              user_editing_card = true
+
+              while user_editing_card
+                puts "Card #{card_number}"
+                puts "\n"
+                puts "Question: #{edited_deck.cards[card_number.to_i - 1][:question]}"
+                puts "Answer: #{edited_deck.cards[card_number.to_i - 1][:answer]}"
+                puts "\n"
+                puts "(1) Edit Question"
+                puts "(2) Edit Answer"
+                puts "(3) Exit"
+                puts "\n"
+                puts "Would you like to edit the question, the answer, or exit? Enter the number to the left"
+                input = gets.chomp
+
+                case input
+                when "1"
+                  # EDIT QUESTION #
+                  system "clear"
+                  puts "Card #{card_number}:"
+                  puts "\n"
+                  puts "Question: #{edited_deck.cards[card_number.to_i - 1][:question]}"
+                  puts "\n"
+                  puts "Enter a new question"
+                  new_question = gets.chomp
+
+                  edited_deck.edit_card("question", new_question, card_number.to_i - 1)
+                  
+                  Database.save(database)
+                  database = Database.get
+                  system "clear"
+                  next
+                when "2"
+                  # EDIT ANSWER #
+                  system "clear"
+                  puts "Card #{card_number}:"
+                  puts "\n"
+                  puts "Answer: #{edited_deck.cards[card_number.to_i - 1][:answer]}"
+                  puts "\n"
+                  puts "Enter a new answer"
+                  new_answer = gets.chomp
+
+                  edited_deck.edit_card("answer", new_answer, card_number.to_i - 1)
+                  
+                  Database.save(database)
+                  database = Database.get
+                  system "clear"
+                when "3"
+                  system "clear"
+                  user_editing_card = false
+                  next
+                else
+                  system "clear"
+                  puts "Invalid input"
+                  next
+                end
+              end
+            end
           when "3"
             # DELETE EXISTING CARD FROM EXISTING DECK #
             if edited_deck.cards.length == 0
