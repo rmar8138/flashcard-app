@@ -12,8 +12,15 @@ class Deck
     return @cards
   end
 
-  def edit_card(card, index)
-    @cards[index] = card
+  def edit_card(what_to_edit, changes, index)
+    case what_to_edit
+    when "question"
+      @cards[index][:question] = changes
+    when "answer"
+      @cards[index][:answer] = changes
+    else
+      return nil
+    end
     return @cards
   end
 
