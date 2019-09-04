@@ -1,3 +1,5 @@
+require "tty-box"
+
 class Review
   attr_accessor :deck
 
@@ -10,6 +12,7 @@ class Review
   end
 
   def start_review(deck = @deck[:cards], first_review = true)
+    
     shuffled_deck = deck.shuffle
     review_after_deck = []
     p shuffled_deck
@@ -17,12 +20,20 @@ class Review
 
     while @current_card < shuffled_deck.length
       system "clear"
+      question_box = TTY::Box.frame(align: :center, padding: 3, width: 30, height: 10, title: {top_left: "#{@deck[:title]}", bottom_right: "Question"}) do
+        "#{shuffled_deck[@current_card][:question]}"
+      end
+
+      answer_box = TTY::Box.frame(align: :center, padding: 3, width: 30, height: 10, title: {top_left: "#{@deck[:title]}", bottom_right: "Answer"}) do
+        "#{shuffled_deck[@current_card][:answer]}"
+      end
 
       puts "Deck: #{@deck[:title]}"
       puts "\n"
       puts "To exit the review at any time, hit the esc key and press enter/return"
       puts "\n\n"
-      puts "Question: #{shuffled_deck[@current_card][:question]}"
+
+      puts question_box
       puts "\n\n"
       puts "Would you like to show answer or skip? Enter number to the left"
       puts "(1) Show answer\n(2) Skip card"
@@ -37,9 +48,7 @@ class Review
           puts "\n"
           puts "To exit the review at any time, hit the esc key and press enter/return"
           puts "\n\n"
-          puts "Question: #{shuffled_deck[@current_card][:question]}"
-          puts "\n\n"
-          puts "Answer: #{shuffled_deck[@current_card][:answer]}"
+          puts answer_box
           puts "\n\n"
           puts "Enter the number to the left of the appropriate outcome"
           puts "\n"
