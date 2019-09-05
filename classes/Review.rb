@@ -1,6 +1,7 @@
 require "tty-prompt"
 require "tty-box"
 require "tty-table"
+require "tty-font"
 
 class Review
   attr_accessor :deck
@@ -108,6 +109,8 @@ class Review
   def show_statistics
     prompt = TTY::Prompt.new
     table = TTY::Table.new ["Stats","Total"], [["Score", "#{@score}/#{@deck[:cards].length}"], ["Number of skips", " #{@number_of_skips}"], ["Incorrect cards", "#{@number_of_incorrect_cards}"]]
+    font = TTY::Font.new(:standard)
+    puts font.write("Stats")
 
     puts "Here are your statistics for this review!"
     puts "\n"

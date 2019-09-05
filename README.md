@@ -58,3 +58,17 @@ Put manual testing screenshot here
 Development log can be viewed [here](./development-log.md)
 
 ## Help
+
+Flashcard App relies on a few gems to run:
+
+- TTY Prompt
+- TTY Font
+- TTY Table
+- TTY Box
+
+```
+gem install tty-prompt
+gem install tty-font
+gem install tty-table
+gem install tty-box
+```
