@@ -9,6 +9,27 @@ require_relative "./methods/methods"
 begin
   database = Database.get
   prompt = TTY::Prompt.new
+  # QUICK REVIEW #
+  # Users can do a quick review if they know the name of the deck they want to review
+  
+  if ARGV.length != 0
+    if ARGV[0] == "--review"
+      database.each do |deck|
+        if deck[:title] == ARGV[1]
+          p deck[:title]
+          quick_review = Review.new(deck)
+          quick_review.start_review
+          exit
+        end
+      end
+
+      puts "Deck not found!"
+      exit
+    else
+      puts "Unknown option"
+      exit
+    end
+  end
 
   welcome_menu_open = true
 

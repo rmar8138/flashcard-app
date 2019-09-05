@@ -113,7 +113,7 @@ class Review
     puts "\n"
     puts table.render(:ascii, alignments: [:left, :center])
     puts "\n"
-    prompt.keypress("Press any key to return to menu")
+    prompt.keypress("Press any key to exit")
     system "clear"
     return nil
   end
