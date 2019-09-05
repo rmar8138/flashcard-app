@@ -241,40 +241,39 @@ while welcome_menu_open
           else
             system "clear"
 
-            deleting_card = true
+            deleting_cards = true
 
-            while deleting_card
-              display_cards(edited_deck)
-              puts "Which card would you like to delete? Enter the number to the left"
-              card_number = gets.chomp
+            while deleting_cards
 
-              if card_number.to_i <= 0 || card_number.to_i > edited_deck.cards.length
+              card_numbers = prompt.multi_select("Which cards would you like to delete? To exit, unselect all cards and hit enter\n", per_page: 8, cycle: true, echo: false) do |menu|
+                menu.enum "."
+                count = 0
+                for card in edited_deck.cards
+                  menu.choice({card[:question] => count})
+                  count += 1
+                end
+              end
+
+              if card_numbers.length == 0
                 system "clear"
-                puts "Invalid input"
+                deleting_cards = false
                 next
               else
-                system "clear"
+                delete_card = prompt.select("Are you sure you want to delete this/these card(s)", [{ Yes: true }, { No: false }], cycle: true)
 
-                puts "Are you sure you want to delete this card? (y/n)"
-                puts "\n"
-                display_card(edited_deck.cards[card_number.to_i - 1])
-                input = gets.chomp
+                if delete_card
+                  edited_deck.delete_card(card_numbers)
 
-                case input
-                when "y"
-                  edited_deck.delete_card(card_number.to_i - 1)
-                  database[deck_number.to_i - 1] = edited_deck.return_deck
+                  database[deck] = edited_deck.return_deck
                   Database.save(database)
                   database = Database.get
-
-                  deleting_card = false
+                  
                   system "clear"
-                when "n"
-                  system "clear"
+                  deleting_cards = false
                   next
                 else
                   system "clear"
-                  puts "Invalid input"
+                  deleting_cards = false
                   next
                 end
               end
