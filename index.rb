@@ -14,16 +14,20 @@ begin
 
   if ARGV.length != 0
     if ARGV[0] == "--review"
-      database.each do |deck|
-        if deck[:title] == ARGV[1]
-          p deck[:title]
-          quick_review = Review.new(deck)
-          quick_review.start_review
-          exit
+      unless ARGV[1] 
+        abort("Please enter a deck title as an argument")
+      else
+        database.each do |deck|
+          if deck[:title] == ARGV[1]
+            p deck[:title]
+            quick_review = Review.new(deck)
+            quick_review.start_review
+            exit
+          end
         end
+        
+        abort("Deck not found!")
       end
-
-      abort("Deck not found!")
     else
       abort("Unknown option")
     end
