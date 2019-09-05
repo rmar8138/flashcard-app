@@ -369,6 +369,8 @@ begin
     end
   end
 rescue => exception
+  # If the database.json file is empty, the program will not be able to load in the database
+  # This displays an error message instead of crashing the program
   puts "There seems to be something wrong with the database file, maybe you have an empty JSON file?"
   puts "If you do have an empty JSON file, delete that file and try again!"
 end
