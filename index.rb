@@ -122,14 +122,20 @@ while welcome_menu_open
     edit_menu_open = true
 
     while edit_menu_open
-      deck = prompt.select("Which deck would you like to review?", per_page: 8, cycle: true) do |menu|
+      deck = prompt.select("Which deck would you like to review? (Select last option 'Exit' to return to menu)\n", per_page: 8, cycle: true) do |menu|
         menu.enum "."
         count = 0
         for deck in database
           menu.choice({deck[:title] => count})
           count += 1
         end
-        menu.choice("Return to menu")
+        menu.choice({ "Exit" => "Exit" })
+      end
+
+      if deck == "Exit"
+        system "clear"
+        edit_menu_open = false
+        next
       end
 
       system "clear"
@@ -298,13 +304,12 @@ while welcome_menu_open
           system "clear"
           puts "Deck: #{edited_deck.title}"
           puts "\n"
-          puts "Are you sure you want to delete this deck? (y/n)"
-          input = gets.chomp
 
-          case input
-          when "y"
-            database.delete_at(deck_number.to_i - 1)
-            system "clear"
+          option = prompt.select("Are you sure you want to delete this deck?", [{ Yes: true }, { No: false }], cycle: true)
+
+          case option
+          when true
+            database.delete_at(deck)
 
             Database.save(database)
             database = Database.get
@@ -312,7 +317,7 @@ while welcome_menu_open
 
             editing_deck = false
             next
-          when "n"
+          when false
             system "clear"
             next
           else
@@ -320,11 +325,6 @@ while welcome_menu_open
             puts "Invalid input"
             next
           end
-
-        when "Exit"
-          system "clear"
-          edited_deck = false
-          break
         else
           system "clear"
           puts "Invalid input"
