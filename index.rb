@@ -284,13 +284,15 @@ while welcome_menu_open
           system "clear"
           puts "Deck: #{edited_deck.title}"
           puts "\n"
-          puts "Enter new deck title:"
-          new_deck_title = gets.chomp
+
+          new_deck_title = prompt.ask("Enter new deck title:")
           edited_deck.title = new_deck_title
-          database[deck_number.to_i - 1] = edited_deck.return_deck
+          database[deck] = edited_deck.return_deck
+
           Database.save(database)
           database = Database.get
           system "clear"
+
         when "Delete Deck"
           # DELETE DECK #
           system "clear"
