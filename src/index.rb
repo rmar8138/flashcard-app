@@ -167,7 +167,7 @@ begin
             menu.choice({deck[:title] => count})
             count += 1
           end
-          menu.choice({ "Exit" => "Exit" })
+          menu.choice("Exit")
         end
 
         if deck == "Exit"
@@ -424,6 +424,7 @@ begin
 rescue => exception
   # If the database.json file is empty, the program will not be able to load in the database
   # This displays an error message instead of crashing the program
-  puts "There seems to be something wrong with the database file, maybe you have an empty JSON file?"
-  puts "If you do have an empty JSON file, delete that file and try again!"
+  puts "Ooops, there was an error :("
+  puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
+  puts "If you do have an empty database.json file, delete that file and try again!"
 end
