@@ -82,7 +82,6 @@ while welcome_menu_open
     until finished_adding_cards
 
       new_card = create_card(new_deck)
-
       new_deck.add_card(new_card)
 
       add_another_card_prompt_open = true
@@ -150,8 +149,10 @@ while welcome_menu_open
           # ADD NEW CARD TO EXISTING DECK #
           system "clear"
 
-          add_card(edited_deck)
-          database[deck_number.to_i - 1] = edited_deck.return_deck
+          new_card = create_card(edited_deck)
+          edited_deck.add_card(new_card)
+
+          database[deck] = edited_deck.return_deck
           Database.save(database)
           database = Database.get
 
@@ -160,12 +161,18 @@ while welcome_menu_open
         when "Edit Card"
           # EDIT EXISTING CARD IN EXISTING DECK #
           system "clear"
-          display_cards(edited_deck)
 
-          puts "Which card would you like to edit? Enter the number to the left"
-          card_number = gets.chomp
+          card_number = prompt.select("Which card would you like to edit?", per_page: 8, cycle: true) do |menu|
+            menu.enum "."
+            count = 0
+            for card in edited_deck.cards
+              menu.choice({card[:question] => count})
+              count += 1
+            end
+            menu.choice("Exit")
+          end
 
-          if card_number.to_i <= 0 || card_number.to_i > edited_deck.cards.length
+          if card_number.to_i < 0 || card_number.to_i > edited_deck.cards.length
             system "clear"
             puts "Invalid input"
             next
@@ -174,51 +181,46 @@ while welcome_menu_open
             user_editing_card = true
 
             while user_editing_card
-              puts "Card #{card_number}"
+              puts "Card #{card_number + 1}"
               puts "\n"
-              puts "Question: #{edited_deck.cards[card_number.to_i - 1][:question]}"
-              puts "Answer: #{edited_deck.cards[card_number.to_i - 1][:answer]}"
+              puts "Question: #{edited_deck.cards[card_number][:question]}"
+              puts "Answer: #{edited_deck.cards[card_number][:answer]}"
               puts "\n"
-              puts "(1) Edit Question"
-              puts "(2) Edit Answer"
-              puts "(3) Exit"
-              puts "\n"
-              puts "Would you like to edit the question, the answer, or exit? Enter the number to the left"
-              input = gets.chomp
+              edit_card_options = ["Edit Question", "Edit Answer", "Exit"]
 
-              case input
-              when "1"
+              option = prompt.select("Would you like to edit the question, the answer, or exit?", edit_card_options)
+
+              case option
+              when "Edit Question"
                 # EDIT QUESTION #
                 system "clear"
-                puts "Card #{card_number}:"
+                puts "Card #{card_number + 1}:"
                 puts "\n"
-                puts "Question: #{edited_deck.cards[card_number.to_i - 1][:question]}"
+                puts "Question: #{edited_deck.cards[card_number][:question]}"
                 puts "\n"
-                puts "Enter a new question"
-                new_question = gets.chomp
+                new_question = prompt.ask("Enter a new question:")
 
-                edited_deck.edit_card("question", new_question, card_number.to_i - 1)
+                edited_deck.edit_card("question", new_question, card_number)
 
                 Database.save(database)
                 database = Database.get
                 system "clear"
                 next
-              when "2"
+              when "Edit Answer"
                 # EDIT ANSWER #
                 system "clear"
-                puts "Card #{card_number}:"
+                puts "Card #{card_number + 1}:"
                 puts "\n"
-                puts "Answer: #{edited_deck.cards[card_number.to_i - 1][:answer]}"
+                puts "Answer: #{edited_deck.cards[card_number][:answer]}"
                 puts "\n"
-                puts "Enter a new answer"
-                new_answer = gets.chomp
+                new_answer = prompt.ask("Enter a new answer:")
 
-                edited_deck.edit_card("answer", new_answer, card_number.to_i - 1)
+                edited_deck.edit_card("answer", new_answer, card_number)
 
                 Database.save(database)
                 database = Database.get
                 system "clear"
-              when "3"
+              when "Exit"
                 system "clear"
                 user_editing_card = false
                 next
