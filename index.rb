@@ -11,7 +11,7 @@ begin
   prompt = TTY::Prompt.new
   # QUICK REVIEW #
   # Users can do a quick review if they know the name of the deck they want to review
-  
+
   if ARGV.length != 0
     if ARGV[0] == "--review"
       database.each do |deck|
@@ -23,11 +23,9 @@ begin
         end
       end
 
-      puts "Deck not found!"
-      exit
+      abort("Deck not found!")
     else
-      puts "Unknown option"
-      exit
+      abort("Unknown option")
     end
   end
 
