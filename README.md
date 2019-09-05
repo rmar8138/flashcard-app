@@ -76,3 +76,5 @@ gem install tty-font
 gem install tty-table
 gem install tty-box
 ```
+
+There is an executable called move_to_dist that can be run to move all application files to a dist folder for future distribution.
