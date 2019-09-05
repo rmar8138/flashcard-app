@@ -347,9 +347,10 @@ while welcome_menu_open
     ############
 
     system "clear"
-    puts "Settings!"
-
-    welcome_menu_open = false
+    puts "Settings! Coming soon..."
+    prompt.keypress("Press any key to return to menu")
+    system "clear"
+    next
   when "Exit"
     system "clear"
     puts "Cya!"

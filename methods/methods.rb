@@ -31,18 +31,6 @@ def create_card(deck)
   return { question: question, answer: answer }
 end
 
-def add_card(deck)
-  puts "Deck: #{deck.title}"
-  puts "Card #{deck.cards.length + 1}"
-  puts " \n"
-  puts "Enter the question"
-  question = gets.chomp
-  puts "Enter the answer"
-  answer = gets.chomp
-
-  deck.add_card({ question: question, answer: answer })
-end
-
 def display_card(card)
   puts "Question: #{card[:question]}"
   puts "Answer: #{card[:answer]}"
