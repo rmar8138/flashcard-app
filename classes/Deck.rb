@@ -24,8 +24,12 @@ class Deck
     return @cards
   end
 
-  def delete_card(index)
-    @cards.delete_at(index)
+  def delete_card(indexes)
+    new_deck = @cards.reject.with_index do |card, index|
+      indexes.include?(index)
+    end
+
+    @cards = new_deck
     return @cards
   end
 

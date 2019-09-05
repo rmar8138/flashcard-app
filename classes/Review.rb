@@ -1,3 +1,4 @@
+require "tty-prompt"
 require "tty-box"
 require "tty-table"
 
@@ -13,6 +14,7 @@ class Review
   end
 
   def start_review(deck = @deck[:cards], first_review = true)
+    prompt = TTY::Prompt.new
     
     shuffled_deck = deck.shuffle
     review_after_deck = []
@@ -31,38 +33,33 @@ class Review
 
       puts "Deck: #{@deck[:title]}"
       puts "\n"
-      puts "To exit the review at any time, hit the esc key and press enter/return"
-      puts "\n\n"
-
       puts question_box
       puts "\n\n"
-      puts "Would you like to show answer or skip? Enter number to the left"
-      puts "(1) Show answer\n(2) Skip card"
-      input = gets.chomp
+      review_options = ["Show Answer", "Skip Card", "Exit"]
+      
+      option = prompt.select("Would you like to show answer, skip card or exit?", review_options, cycle: true)
 
       system "clear"
-      case input
-      when "1"
+      case option
+      when "Show Answer"
       user_viewing_answer = true
 
       while user_viewing_answer
         puts "Deck: #{@deck[:title]}"
         puts "\n"
-        puts "To exit the review at any time, hit the esc key and press enter/return"
-        puts "\n\n"
         puts answer_box
         puts "\n\n"
-        puts "Enter the number to the left of the appropriate outcome"
-        puts "\n"
-        puts "(1) Correct\n(2) Incorrect"
-        input = gets.chomp
-        case input
-        when "1"
+        guess_options = ["Correct", "Incorrect"]
+
+        guess = prompt.select("Did you guess this card correctly or incorrectly?", guess_options, cycle: true)
+
+        case guess
+        when "Correct"
           @score += 1 if first_review == true
           user_viewing_answer = false
           system "clear"
           next
-        when "2"
+        when "Incorrect"
           # add card to review_after deck #
           @number_of_incorrect_cards += 1
           review_after_deck.push(shuffled_deck[@current_card])
@@ -80,14 +77,15 @@ class Review
         @current_card += 1
         system "clear"
         next
-      when "2"
+      when "Skip Card"
         # Move card to back of pile
         @number_of_skips += 1
         skipped_card = shuffled_deck.slice!(@current_card)
         shuffled_deck.push(skipped_card)
         system "clear"
         next
-      when "\e"
+      when "Exit"
+        # Break out of start_review method
         return nil
       else
         system "clear"
@@ -108,17 +106,14 @@ class Review
   end
 
   def show_statistics
+    prompt = TTY::Prompt.new
     table = TTY::Table.new ["Stats","Total"], [["Score", "#{@score}/#{@deck[:cards].length}"], ["Number of skips", " #{@number_of_skips}"], ["Incorrect cards", "#{@number_of_incorrect_cards}"]]
 
     puts "Here are your statistics for this review!"
     puts "\n"
     puts table.render(:ascii, alignments: [:left, :center])
-    # puts "Score: #{@score}/#{@deck[:cards].length}"
-    # puts "Number of skips: #{@number_of_skips}"
-    # puts "Number of incorrectly guessed cards: #{@number_of_incorrect_cards}"
     puts "\n"
-    puts "Enter any key to return to menu"
-    input = gets.chomp
+    prompt.keypress("Press any key to return to menu")
     system "clear"
     return nil
   end

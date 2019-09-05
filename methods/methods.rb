@@ -1,3 +1,4 @@
+require "tty-prompt"
 require "tty-table"
 require_relative "../classes/Deck"
 
@@ -17,16 +18,17 @@ def display_decks(decks)
   puts "\n"
 end
 
-def add_card(deck)
+def create_card(deck)
+  prompt = TTY::Prompt.new
+  
   puts "Deck: #{deck.title}"
+  puts "\n\n"
   puts "Card #{deck.cards.length + 1}"
-  puts " \n"
-  puts "Enter the question"
-  question = gets.chomp
-  puts "Enter the answer"
-  answer = gets.chomp
+  puts "\n\n"
+  question = prompt.ask("Enter the question:")
+  answer = prompt.ask("Enter the answer:")
 
-  deck.add_card({ question: question, answer: answer })
+  return { question: question, answer: answer }
 end
 
 def display_card(card)
