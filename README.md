@@ -4,7 +4,11 @@ Flashcard App is a terminal app written in Ruby and is the first assessment of t
 
 ## Statement of Purpose and Scope
 
-Flashcard App is an application that builds decks of flashcards for users to use for study and review. Users create decks and fill them with cards, like any standard flashcard deck. These cards have a front and a back; the front holding the question and the back holding the answer. This will allow users to review any topic they wish straight from their command line!
+Flashcard App is an application that allows users to create flashcards for review. Users can sort these cards into decks that have titles for easy review. Users can review these decks to practice or study on a topic they are working on. Decks and cards themselves can be edited by the users. Users can change settings to allow for different reviews (timed reviews etc).
+
+Flashcards are a great way for people to review a topic that they are struggling on. However, they may be cumbersome to make physically, and while flashcards are portable, they can be prone to damage or being lost. Users can use this app straight from their terminal to easily review any subject they wish. While there are already fully fledged flashcards apps readily available, users can enjoy a no frills simple flashcard experience through this app.
+
+This app can be a great resource for anyone wishing to brush up on a topic they are learning. Developers who enjoy working with the command line can now create and review their own flashcard decks straight from the comfort of their own command line!
 
 ## Features
 
@@ -13,7 +17,9 @@ Flashcard App is an application that builds decks of flashcards for users to use
 
 - Review Decks  
   Users are able to review flashcards in a deck. Users can skip cards or answer whether they got the card right or wrong. Wrong cards sent to another array and recursion is used to repeatedly review until the user gets all cards correct. Users can also enter the --review flag when running the program followed by the name of a deck as an argument in order to have a quick review session without running the app completely.
+
 - Change Settings
+  Users are able to configure different features to tweak how they would like their reviews to run. This is still udner construction and will be updated soon!
 
 ## User Interaction and Experience
 
