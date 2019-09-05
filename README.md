@@ -8,9 +8,10 @@ Flashcard App is an application that builds decks of flashcards for users to use
 
 ## Features
 
-- Create, Update, Edit and Delete Decks/Cards
+- Create, Update, Edit and Delete Decks/Cards  
   Users are able to perform basic CRUD operations on decks and individual flashcards. User input is received and case statements and if/else statements are used to direct control flow. These decks are saved in a hash and stored locally in a JSON file.
-- Review Decks
+
+- Review Decks  
   Users are able to review flashcards in a deck. Users can skip cards or answer whether they got the card right or wrong. Wrong cards sent to another array and recursion is used to repeatedly review until the user gets all cards correct. Users can also enter the --review flag when running the program followed by the name of a deck as an argument in order to have a quick review session without running the app completely.
 - Change Settings
 
