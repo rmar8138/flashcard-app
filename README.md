@@ -9,3 +9,5 @@ Flashcard App is an application that builds decks of flashcards for users to use
 ## Features
 
 ## User Interaction and Experience
+
+## Help
