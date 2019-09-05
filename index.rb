@@ -70,14 +70,15 @@ while welcome_menu_open
 
     system "clear"
 
-    title = prompt.ask("Please enter a title for the deck:")
+    title = prompt.ask("Please enter a title for the deck:") do |question|
+      question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.')
+    end
 
     new_deck = Deck.new(title)
 
     system "clear"
 
-    
-
+  
     finished_adding_cards = false
     until finished_adding_cards
 
@@ -294,7 +295,9 @@ while welcome_menu_open
           puts "Deck: #{edited_deck.title}"
           puts "\n"
 
-          new_deck_title = prompt.ask("Enter new deck title:")
+          new_deck_title = prompt.ask("Enter new deck title:") do |question|
+            question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.')
+          end
           edited_deck.title = new_deck_title
           database[deck] = edited_deck.return_deck
 
