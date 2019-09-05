@@ -178,7 +178,10 @@ while welcome_menu_open
             menu.choice("Exit")
           end
 
-          if card_number.to_i < 0 || card_number.to_i > edited_deck.cards.length
+          if card_number == "Exit"
+            system "clear"
+            next
+          elsif card_number.to_i < 0 || card_number.to_i > edited_deck.cards.length
             system "clear"
             puts "Invalid input"
             next
@@ -325,6 +328,10 @@ while welcome_menu_open
             puts "Invalid input"
             next
           end
+        when "Exit"
+          system "clear"
+          editing_deck = false
+          next
         else
           system "clear"
           puts "Invalid input"
