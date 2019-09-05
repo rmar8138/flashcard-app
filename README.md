@@ -1,6 +1,6 @@
 # Flashcard App
 
-Flashcard App is a terminal app written in Ruby and is the first assessment of the Coder Academy Bootcamp Fast Track course.
+Flashcard App is a terminal app written in Ruby and is the first assessment of the Coder Academy Bootcamp Fast Track course. A link to the repository can be found [here](https://github.com/rmar8138/flashcard-app).
 
 ## Statement of Purpose and Scope
 
