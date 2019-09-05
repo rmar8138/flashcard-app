@@ -223,6 +223,7 @@ begin
               user_editing_card = true
 
               while user_editing_card
+                puts font.write("Edit Deck")
                 puts "Card #{card_number + 1}"
                 puts "\n"
                 puts "Question: #{edited_deck.cards[card_number][:question]}"
