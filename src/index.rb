@@ -29,6 +29,8 @@ begin
         
         abort("Deck not found!")
       end
+    elsif ARGV[0] == "--kahoot"
+      pid = fork{ exec "afplay", "./assets/song.mp3" }
     else
       abort("Unknown option")
     end
@@ -42,7 +44,11 @@ begin
     ##################
     system "clear"
     font = TTY::Font.new(:standard)
-    puts font.write("Flashcard App")
+    if ARGV[0] == "--kahoot"
+      puts font.write("KAHOOT")
+    else
+      puts font.write("Flashcard App")
+    end
 
     puts "Welcome to the terminal flash card app!"
     puts "\n"
@@ -201,6 +207,13 @@ begin
             # EDIT EXISTING CARD IN EXISTING DECK #
             system "clear"
             puts font.write("Edit Deck")
+
+            if edited_deck.cards.length == 0
+              prompt.keypress("No cards in this deck to edit! Press any key to go back")
+              system "clear"
+              next
+            end
+
             card_number = prompt.select("Which card would you like to edit?", per_page: 8, cycle: true) do |menu|
               menu.enum "."
               count = 0
@@ -280,8 +293,9 @@ begin
             # DELETE EXISTING CARD FROM EXISTING DECK #
             if edited_deck.cards.length == 0
               system "clear"
-              puts "No cards in this deck to delete!"
-              puts "\n"
+              puts font.write("Edit Deck")
+              prompt.keypress("No cards in this deck to delete! Press any key to go back")
+              system "clear"
               next
             else
               system "clear"
@@ -405,6 +419,8 @@ begin
       next
     end
   end
+
+  pid = fork{ exec "killall afplay" } if ARGV[0] == "--kahoot"
 rescue => exception
   # If the database.json file is empty, the program will not be able to load in the database
   # This displays an error message instead of crashing the program
