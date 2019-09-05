@@ -18,7 +18,7 @@ This app can be a great resource for anyone wishing to brush up on a topic they 
 - Review Decks  
   Users are able to review flashcards in a deck. Users can skip cards or answer whether they got the card right or wrong. Wrong cards sent to another array and recursion is used to repeatedly review until the user gets all cards correct. Users can also enter the --review flag when running the program followed by the name of a deck as an argument in order to have a quick review session without running the app completely.
 
-- Change Settings
+- Change Settings  
   Users are able to configure different features to tweak how they would like their reviews to run. This is still udner construction and will be updated soon!
 
 ## User Interaction and Experience
