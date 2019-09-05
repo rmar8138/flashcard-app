@@ -43,19 +43,23 @@ Users can change settings to alter the way reviews are structured. Under constru
 
 ## Control Flow Diagram
 
-Put control flow diagram here
+Control Flow diagram of the app as of the latest commit can be found [here](./docs/flashcard-app-flowchart.pdf).
 
 ## Implementation Plan
 
-Put trello screenshot here
+Trello was used to keep track of feature and documentation backlog. When features where being implemented, feature cards would be placed in the 'In Progress' list. When they were finished, they would be moved to the 'Testing' list to be manually tested. Once manually tested, they moved to the 'Completed' list.
+
+![Trello Board](./docs/flashcard-app-trello.png)
 
 ## Manual Testing
 
-Put manual testing screenshot here
+Manual testing was implemented as the app was being developed, and tested features were tracked on a separate spreadsheet. A screenshot of this can be seen below.
+
+![Manual testing spreadsheet](./docs/flashcard-app-manual-test.png)
 
 ## Development Log
 
-Development log can be viewed [here](./development-log.md)
+Development log can be viewed [here](./development-log.md).
 
 ## Help
 
