@@ -2,7 +2,6 @@ require "tty-prompt"
 require "tty-box"
 require "tty-table"
 require "tty-font"
-require_relative "../methods/methods"
 
 class Review
   attr_accessor :deck

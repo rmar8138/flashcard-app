@@ -1,3 +1,5 @@
+require "tty-prompt"
+
 class Deck
   attr_accessor :title
   attr_reader :cards
@@ -7,17 +9,57 @@ class Deck
     @cards = cards
   end
 
-  def add_card(card)
-    @cards.push(card)
+  def select_card(message, multi_select)
+    prompt = TTY::Prompt.new
+    if multi_select
+      return card_numbers = prompt.multi_select(message, per_page: 8, cycle: true, echo: false) do |menu|
+        menu.enum "."
+        count = 0
+        for card in @cards
+          menu.choice({card[:question] => count})
+          count += 1
+        end
+      end
+    else
+      return card_number = prompt.select(message, per_page: 8, cycle: true, echo: false) do |menu|
+        menu.enum "."
+        count = 0
+        for card in @cards
+          menu.choice({card[:question] => count})
+          count += 1
+        end
+        menu.choice("Exit")
+      end
+    end
+  end
+
+  def add_card
+    prompt = TTY::Prompt.new
+  
+    puts "Deck: #{@title}"
+    puts "\n\n"
+    puts "Card #{@cards.length + 1}"
+    puts "\n\n"
+    question = prompt.ask("Enter the question:")
+    answer = prompt.ask("Enter the answer:")
+
+    @cards.push({ question: question, answer: answer })
     return @cards
   end
 
-  def edit_card(what_to_edit, changes, index)
-    case what_to_edit
+  def edit_card(type, card_number)
+    prompt = TTY::Prompt.new
+    puts "Card #{card_number + 1}:"
+    puts "\n"
+    puts "#{type.capitalize}: #{@cards[card_number][type.to_sym]}"
+    puts "\n"
+    text = prompt.ask("Enter a new #{type}:")
+
+    case type
     when "question"
-      @cards[index][:question] = changes
+      @cards[card_number][:question] = text
     when "answer"
-      @cards[index][:answer] = changes
+      @cards[card_number][:answer] = text
     else
       return nil
     end
@@ -37,4 +79,3 @@ class Deck
     return { title: @title, cards: @cards }
   end
 end
-
