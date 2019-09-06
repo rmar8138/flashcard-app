@@ -2,6 +2,7 @@ require "tty-prompt"
 require "tty-box"
 require "tty-table"
 require "tty-font"
+require_relative "../methods/methods"
 
 class Review
   attr_accessor :deck
@@ -19,17 +20,15 @@ class Review
     
     shuffled_deck = deck.shuffle
     review_after_deck = []
-    p shuffled_deck
-    p review_after_deck
 
     while @current_card < shuffled_deck.length
       system "clear"
       question_box = TTY::Box.frame(align: :center, padding: 3, width: 30, height: 10, title: {top_left: "#{@deck[:title]}", bottom_right: "Question"}) do
-        "#{shuffled_deck[@current_card][:question]}"
+        shuffled_deck[@current_card][:question]
       end
 
       answer_box = TTY::Box.frame(align: :center, padding: 3, width: 30, height: 10, title: {top_left: "#{@deck[:title]}", bottom_right: "Answer"}) do
-        "#{shuffled_deck[@current_card][:answer]}"
+        shuffled_deck[@current_card][:answer]
       end
 
       puts "Deck: #{@deck[:title]}"

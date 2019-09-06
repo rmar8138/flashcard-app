@@ -44,6 +44,8 @@ begin
     ##################
     system "clear"
     font = TTY::Font.new(:standard)
+
+    # KAHOOT EASTER EGG #
     if ARGV[0] == "--kahoot"
       puts font.write("KAHOOT")
     else
@@ -146,7 +148,7 @@ begin
       prompt.keypress("Press any key to save and return to menu")
 
       database.push(new_deck.return_deck)
-      Database.save(database)
+      database = Database.update_database(database)
 
       system "clear"
       next
@@ -198,8 +200,7 @@ begin
             edited_deck.add_card(new_card)
 
             database[deck] = edited_deck.return_deck
-            Database.save(database)
-            database = Database.get
+            database = Database.update_database(database)
 
             system "clear"
             next
@@ -259,8 +260,7 @@ begin
 
                   edited_deck.edit_card("question", new_question, card_number)
 
-                  Database.save(database)
-                  database = Database.get
+                  database = Database.update_database(database)
                   system "clear"
                   next
                 when "Edit Answer"
@@ -275,8 +275,7 @@ begin
 
                   edited_deck.edit_card("answer", new_answer, card_number)
 
-                  Database.save(database)
-                  database = Database.get
+                  database = Database.update_database(database)
                   system "clear"
                 when "Exit"
                   system "clear"
@@ -324,9 +323,7 @@ begin
                     edited_deck.delete_card(card_numbers)
 
                     database[deck] = edited_deck.return_deck
-                    Database.save(database)
-                    database = Database.get
-                    
+                    database = Database.update_database(database)
                     system "clear"
                     deleting_cards = false
                     next
@@ -351,8 +348,7 @@ begin
             edited_deck.title = new_deck_title
             database[deck] = edited_deck.return_deck
 
-            Database.save(database)
-            database = Database.get
+            database = Database.update_database(database)
             system "clear"
 
           when "Delete Deck"
@@ -368,8 +364,7 @@ begin
             when true
               database.delete_at(deck)
 
-              Database.save(database)
-              database = Database.get
+              database = Database.update_database(database)
               system "clear"
 
               editing_deck = false
@@ -426,5 +421,5 @@ rescue => exception
   # This displays an error message instead of crashing the program
   puts "Ooops, there was an error :("
   puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
-  puts "If you do have an empty database.json file, delete that file and try again!"
+  puts "If you do have an empty JSON file, delete that file and try again!"
 end

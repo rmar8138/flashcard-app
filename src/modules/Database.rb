@@ -10,4 +10,9 @@ module Database
   def self.save(updated_database)
     File.open(@path_to_database, "w") { |file| file.write(JSON.generate(updated_database))}
   end
+
+  def self.update_database(updated_database)
+    self.save(updated_database)
+    return self.get
+  end
 end
