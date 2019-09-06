@@ -37,3 +37,4 @@ class Deck
     return { title: @title, cards: @cards }
   end
 end
+

@@ -7,6 +7,7 @@ require_relative "./classes/Review"
 require_relative "./modules/Database"
 require_relative "./methods/methods"
 
+
 begin
   database = Database.get
   prompt = TTY::Prompt.new
@@ -115,7 +116,6 @@ begin
 
       system "clear"
 
-    
       finished_adding_cards = false
       until finished_adding_cards
         puts font.write("Add Deck")
@@ -252,13 +252,9 @@ begin
                   # EDIT QUESTION #
                   system "clear"
                   puts font.write("Edit Deck")
-                  puts "Card #{card_number + 1}:"
-                  puts "\n"
-                  puts "Question: #{edited_deck.cards[card_number][:question]}"
-                  puts "\n"
-                  new_question = prompt.ask("Enter a new question:")
 
-                  edited_deck.edit_card("question", new_question, card_number)
+                  edited_card = edit_card_text("question", card_number, edited_deck.cards[card_number][:question])
+                  edited_deck.edit_card("question", edited_card, card_number)
 
                   database = Database.update_database(database)
                   system "clear"
@@ -267,13 +263,9 @@ begin
                   # EDIT ANSWER #
                   system "clear"
                   puts font.write("Edit Deck")
-                  puts "Card #{card_number + 1}:"
-                  puts "\n"
-                  puts "Answer: #{edited_deck.cards[card_number][:answer]}"
-                  puts "\n"
-                  new_answer = prompt.ask("Enter a new answer:")
 
-                  edited_deck.edit_card("answer", new_answer, card_number)
+                  edited_card = edit_card_text("answer", card_number, edited_deck.cards[card_number][:question])
+                  edited_deck.edit_card("answer", edited_card, card_number)
 
                   database = Database.update_database(database)
                   system "clear"
