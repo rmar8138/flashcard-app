@@ -18,8 +18,11 @@ This app can be a great resource for anyone wishing to brush up on a topic they 
 - Review Decks  
   Users are able to review flashcards in a deck. Users can skip cards or answer whether they got the card right or wrong. Wrong cards sent to another array and recursion is used to repeatedly review until the user gets all cards correct. Users can also enter the --review flag when running the program followed by the name of a deck as an argument in order to have a quick review session without running the app completely.
 
+- Show Statistics  
+  Users after completing a review are shown statistics based on how well they did. These show how many cards they got correct, how many they got incorrect, and how many skips were made. These running totals are all kept on instance variables in each Review object. Further implementation can include more statistics such as how long the review took, percentages, which cards they spent the most time, and so on.
+
 - Change Settings  
-  Users are able to configure different features to tweak how they would like their reviews to run. This is still udner construction and will be updated soon!
+  Users are able to configure different features to tweak how they would like their reviews to run. This is still udner construction and will be updated soon! I plan on having the option to choose between shuffled and ordered reviews, reviewing multiple decks, reviewing multiple decks in sequence or shuffled, timed reviews and more.
 
 ## User Interaction and Experience
 
@@ -37,15 +40,15 @@ Users can select from their decks to review. Once a deck is selected, users ente
 
 ##### Add Deck
 
-Users are able to create their own decks, and are prompted for a deck title. They can then create as many cards as they want.
+Users are able to create their own decks, and are prompted for a deck title. They can then create as many cards as they want. Upon exiting, the deck is saved to the JSON file.
 
 ##### Edit Deck
 
-Users can view all of their decks and can either add extra cards, edit existing cards, delete cards, edit the deck title or delete the entire deck.
+Users can view all of their decks and can either add extra cards, edit existing cards, delete cards, edit the deck title or delete the entire deck. Upon making changes, the JSON file is updated.
 
 ##### Settings
 
-Users can change settings to alter the way reviews are structured. Under construction!
+Users can change settings to alter the way reviews are structured. I plan on having these settings saved in a separate JSON file to be pulled in at the start of the app. Under construction!
 
 ## Control Flow Diagram
 
