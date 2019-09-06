@@ -22,11 +22,25 @@ class Review
 
     while @current_card < shuffled_deck.length
       system "clear"
-      question_box = TTY::Box.frame(align: :center, padding: 3, width: 30, height: 10, title: {top_left: "#{@deck[:title]}", bottom_right: "Question"}) do
+      question_box = TTY::Box.frame(
+        align: :center, 
+        padding: 3, 
+        width: 30, 
+        height: 10, 
+        title: {top_left: "#{@deck[:title]}", 
+        bottom_right: "Question"}
+      ) do
         shuffled_deck[@current_card][:question]
       end
 
-      answer_box = TTY::Box.frame(align: :center, padding: 3, width: 30, height: 10, title: {top_left: "#{@deck[:title]}", bottom_right: "Answer"}) do
+      answer_box = TTY::Box.frame(
+        align: :center, 
+        padding: 3, 
+        width: 30,
+        height: 10, 
+        title: {top_left: "#{@deck[:title]}", 
+        bottom_right: "Answer"}
+      ) do
         shuffled_deck[@current_card][:answer]
       end
 
@@ -36,7 +50,11 @@ class Review
       puts "\n\n"
       review_options = ["Show Answer", "Skip Card", "Exit"]
       
-      option = prompt.select("Would you like to show answer, skip card or exit?", review_options, cycle: true)
+      option = prompt.select(
+        "Would you like to show answer, skip card or exit?", 
+        review_options, 
+        cycle: true
+      )
 
       system "clear"
       case option
@@ -50,7 +68,11 @@ class Review
         puts "\n\n"
         guess_options = ["Correct", "Incorrect"]
 
-        guess = prompt.select("Did you guess this card correctly or incorrectly?", guess_options, cycle: true)
+        guess = prompt.select(
+          "Did you guess this card correctly or incorrectly?", 
+          guess_options, 
+          cycle: true
+        )
 
         case guess
         when "Correct"
@@ -106,7 +128,12 @@ class Review
 
   def show_statistics
     prompt = TTY::Prompt.new
-    table = TTY::Table.new ["Stats","Total"], [["Score", "#{@score}/#{@deck[:cards].length}"], ["Number of skips", " #{@number_of_skips}"], ["Incorrect cards", "#{@number_of_incorrect_cards}"]]
+    table = TTY::Table.new(
+      ["Stats","Total"], 
+      [["Score", "#{@score}/#{@deck[:cards].length}"], 
+      ["Number of skips", " #{@number_of_skips}"], 
+      ["Incorrect cards", "#{@number_of_incorrect_cards}"]]
+    )
     font = TTY::Font.new(:standard)
     puts font.write("Stats")
 

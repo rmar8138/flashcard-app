@@ -12,7 +12,12 @@ class Deck
   def select_card(message, multi_select)
     prompt = TTY::Prompt.new
     if multi_select
-      return card_numbers = prompt.multi_select(message, per_page: 8, cycle: true, echo: false) do |menu|
+      return card_numbers = prompt.multi_select(
+        message, 
+        per_page: 8, 
+        cycle: true,
+        echo: false
+      ) do |menu|
         menu.enum "."
         count = 0
         for card in @cards
@@ -21,7 +26,12 @@ class Deck
         end
       end
     else
-      return card_number = prompt.select(message, per_page: 8, cycle: true, echo: false) do |menu|
+      return card_number = prompt.select(
+        message, 
+        per_page: 8, 
+        cycle: true, 
+        echo: false
+      ) do |menu|
         menu.enum "."
         count = 0
         for card in @cards

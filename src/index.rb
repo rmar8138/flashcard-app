@@ -54,7 +54,17 @@ begin
 
     puts "Welcome to the terminal flash card app!"
     puts "\n"
-    input = prompt.select("Please select an option:", ["Review", "Add Deck", "Edit Deck", "Settings", "Exit"], cycle: true)
+    input = prompt.select(
+      "Please select an option:",
+      [
+        "Review", 
+        "Add Deck", 
+        "Edit Deck", 
+        "Settings", 
+        "Exit"
+      ], 
+      cycle: true
+    )
 
     case input
     when "Review"
@@ -97,7 +107,10 @@ begin
       system "clear"
       puts font.write("Add Deck")
       title = prompt.ask("Please enter a title for the deck:") do |question|
-        question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.')
+        question.validate(
+          /[A-Za-z0-9\s\.\:\,\-\_]/, 
+          'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.'
+        )
       end
       new_deck = Deck.new(title)
 
@@ -111,7 +124,11 @@ begin
         add_another_card_prompt_open = true
         
         while add_another_card_prompt_open
-          add_another = prompt.select("Add another card?", [{ Yes: true }, { No: false }], cycle: true)
+          add_another = prompt.select(
+            "Add another card?", 
+            [{ Yes: true }, { No: false }], 
+            cycle: true
+          )
 
           case add_another
           when true
@@ -164,8 +181,20 @@ begin
           puts "Cards: #{edited_deck.cards.length} card(s)"
           puts "\n"
 
-          edit_options = ["Add Card", "Edit Card", "Delete Card", "Edit Deck Title", "Delete Deck", "Exit"]
-          option = prompt.select("Please select an option:", edit_options, cycle: true, per_page: 10)
+          edit_options = [
+            "Add Card", 
+            "Edit Card", 
+            "Delete Card", 
+            "Edit Deck Title", 
+            "Delete Deck", 
+            "Exit"
+          ]
+          option = prompt.select(
+            "Please select an option:", 
+            edit_options, 
+            cycle: true, 
+            per_page: 10
+          )
 
           case option
           when "Add Card"
@@ -256,14 +285,21 @@ begin
 
               while deleting_cards
                 puts font.write("Edit Deck")
-                card_numbers = edited_deck.select_card("Which cards would you like to delete? To exit, unselect all cards and hit enter\n", true)
+                card_numbers = edited_deck.select_card(
+                  "Which cards would you like to delete? To exit, unselect all cards and hit enter\n", 
+                  true
+                )
                 
                 if card_numbers.length == 0
                   system "clear"
                   deleting_cards = false
                   next
                 else
-                  delete_card = prompt.select("Are you sure you want to delete this/these card(s)", [{ Yes: true }, { No: false }], cycle: true)
+                  delete_card = prompt.select(
+                    "Are you sure you want to delete this/these card(s)", 
+                    [{ Yes: true }, { No: false }], 
+                    cycle: true
+                  )
 
                   if delete_card
                     edited_deck.delete_card(card_numbers)
@@ -288,7 +324,9 @@ begin
             puts "Deck: #{edited_deck.title}"
             puts "\n"
             new_deck_title = prompt.ask("Enter new deck title:") do |question|
-              question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.')
+              question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 
+                'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.'
+              )
             end
             edited_deck.title = new_deck_title
 
@@ -301,7 +339,9 @@ begin
             puts font.write("Edit Deck")
             puts "Deck: #{edited_deck.title}"
             puts "\n"
-            option = prompt.select("Are you sure you want to delete this deck?", [{ Yes: true }, { No: false }], cycle: true)
+            option = prompt.select("Are you sure you want to delete this deck?", 
+              [{ Yes: true }, { No: false }], 
+              cycle: true)
 
             case option
             when true
