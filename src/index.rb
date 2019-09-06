@@ -5,7 +5,6 @@ require "tty-table"
 require_relative "./classes/Deck"
 require_relative "./classes/Review"
 require_relative "./modules/Database"
-require_relative "./methods/methods"
 
 
 begin
@@ -16,7 +15,7 @@ begin
 
   if ARGV.length != 0
     if ARGV[0] == "--review"
-      unless ARGV[1] 
+      if !ARGV[1] 
         abort("Please enter a deck title as an argument")
       else
         database.each do |deck|
@@ -27,10 +26,10 @@ begin
             exit
           end
         end
-        
         abort("Deck not found!")
       end
     elsif ARGV[0] == "--kahoot"
+      # PURE GENIUS, OR GUESS WORK??? #
       pid = fork{ exec "afplay", "./assets/song.mp3" }
     else
       abort("Unknown option")
@@ -56,12 +55,12 @@ begin
     puts "Welcome to the terminal flash card app!"
     puts "\n"
     input = prompt.select("Please select an option:", ["Review", "Add Deck", "Edit Deck", "Settings", "Exit"], cycle: true)
+
     case input
     when "Review"
       ###############
       # DECK REVIEW #
       ###############
-
       system "clear"
 
       review_menu_open = true
@@ -69,14 +68,12 @@ begin
         system "clear"
         puts "No decks to review! Please make a deck first"
         puts "\n"
-
         review_menu_open = false
         next
       end
 
       while review_menu_open
         puts font.write("Review")
-
         deck = Database.select_deck("Which deck would you like to review? Select last option 'Exit' to return to menu")
 
         if deck == "Exit"
@@ -88,7 +85,6 @@ begin
         # START REVIEW! #
         review = Review.new(database[deck])
         review.start_review
-
         review_menu_open = false
         next
       end
@@ -98,23 +94,22 @@ begin
       ############
       # ADD DECK #
       ############
-
       system "clear"
       puts font.write("Add Deck")
       title = prompt.ask("Please enter a title for the deck:") do |question|
         question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.')
       end
-
       new_deck = Deck.new(title)
 
       system "clear"
-
       finished_adding_cards = false
+
       until finished_adding_cards
         puts font.write("Add Deck")
         new_deck.add_card
 
         add_another_card_prompt_open = true
+        
         while add_another_card_prompt_open
           add_another = prompt.select("Add another card?", [{ Yes: true }, { No: false }], cycle: true)
 
@@ -138,23 +133,19 @@ begin
       puts "#{new_deck.title}: #{new_deck.cards.length} card(s)"
       puts "\n"
       prompt.keypress("Press any key to save and return to menu")
-
       database.push(new_deck.return_deck)
       database = Database.update_database(database)
-
       system "clear"
       next
     when "Edit Deck"
       #############
       # EDIT DECK #
       #############
-
       system "clear"
       edit_menu_open = true
 
       while edit_menu_open
         puts font.write("Edit Deck")
-
         deck = Database.select_deck("Which deck would you like to review? Select last option 'Exit' to return to menu")
         p deck
         if deck == "Exit"
@@ -181,12 +172,9 @@ begin
             # ADD NEW CARD TO EXISTING DECK #
             system "clear"
             puts font.write("Edit Deck")
-
             edited_deck.add_card
-
             database[deck] = edited_deck.return_deck
             database = Database.update_database(database)
-
             system "clear"
             next
           when "Edit Card"
@@ -221,7 +209,6 @@ begin
                 puts "Answer: #{edited_deck.cards[card_number][:answer]}"
                 puts "\n"
                 edit_card_options = ["Edit Question", "Edit Answer", "Exit"]
-
                 option = prompt.select("Would you like to edit the question, the answer, or exit?", edit_card_options)
 
                 case option
@@ -229,7 +216,6 @@ begin
                   # EDIT QUESTION #
                   system "clear"
                   puts font.write("Edit Deck")
-
                   edited_deck.edit_card("question", card_number)
 
                   database[deck] = edited_deck.return_deck
@@ -240,7 +226,6 @@ begin
                   # EDIT ANSWER #
                   system "clear"
                   puts font.write("Edit Deck")
-
                   edited_deck.edit_card("answer", card_number)
 
                   database[deck] = edited_deck.return_deck
@@ -267,15 +252,12 @@ begin
               next
             else
               system "clear"
-
               deleting_cards = true
 
               while deleting_cards
                 puts font.write("Edit Deck")
-
                 card_numbers = edited_deck.select_card("Which cards would you like to delete? To exit, unselect all cards and hit enter\n", true)
                 
-
                 if card_numbers.length == 0
                   system "clear"
                   deleting_cards = false
@@ -305,32 +287,27 @@ begin
             puts font.write("Edit Deck")
             puts "Deck: #{edited_deck.title}"
             puts "\n"
-
             new_deck_title = prompt.ask("Enter new deck title:") do |question|
               question.validate(/[A-Za-z0-9\s\.\:\,\-\_]/, 'Only letters, numbers, spaces, dashes, underscores, periods, colons and commas allowed. No white space at the start of title.')
             end
             edited_deck.title = new_deck_title
-            database[deck] = edited_deck.return_deck
 
+            database[deck] = edited_deck.return_deck
             database = Database.update_database(database)
             system "clear"
-
           when "Delete Deck"
             # DELETE DECK #
             system "clear"
             puts font.write("Edit Deck")
             puts "Deck: #{edited_deck.title}"
             puts "\n"
-
             option = prompt.select("Are you sure you want to delete this deck?", [{ Yes: true }, { No: false }], cycle: true)
 
             case option
             when true
               database.delete_at(deck)
-
               database = Database.update_database(database)
               system "clear"
-
               editing_deck = false
               next
             when false
@@ -358,7 +335,6 @@ begin
       ############
       # SETTINGS #
       ############
-
       system "clear"
       puts font.write("Settings")
       puts "Settings! Coming soon..."
