@@ -1,3 +1,5 @@
+require "tty-prompt"
+
 class Deck
   attr_accessor :title
   attr_reader :cards
@@ -5,6 +7,30 @@ class Deck
   def initialize(title, cards = [])
     @title = title
     @cards = cards
+  end
+
+  def select_card(message, multi_select)
+    prompt = TTY::Prompt.new
+    if multi_select
+      return card_numbers = prompt.multi_select(message, per_page: 8, cycle: true, echo: false) do |menu|
+        menu.enum "."
+        count = 0
+        for card in @cards
+          menu.choice({card[:question] => count})
+          count += 1
+        end
+      end
+    else
+      return card_number = prompt.select(message, per_page: 8, cycle: true, echo: false) do |menu|
+        menu.enum "."
+        count = 0
+        for card in @cards
+          menu.choice({card[:question] => count})
+          count += 1
+        end
+        menu.choice("Exit")
+      end
+    end
   end
 
   def add_card

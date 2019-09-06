@@ -214,15 +214,7 @@ begin
               next
             end
 
-            card_number = prompt.select("Which card would you like to edit?", per_page: 8, cycle: true) do |menu|
-              menu.enum "."
-              count = 0
-              for card in edited_deck.cards
-                menu.choice({card[:question] => count})
-                count += 1
-              end
-              menu.choice("Exit")
-            end
+            card_number = edited_deck.select_card("Which card would you like to edit?", false)
 
             if card_number == "Exit"
               system "clear"
@@ -251,9 +243,6 @@ begin
                   # EDIT QUESTION #
                   system "clear"
                   puts font.write("Edit Deck")
-
-                  # edited_card = edit_card_text("question", card_number, edited_deck.cards[card_number][:question])
-                  # edited_deck.edit_card("question", edited_card, card_number)
 
                   edited_deck.edit_card("question", card_number)
 
@@ -297,15 +286,9 @@ begin
 
               while deleting_cards
                 puts font.write("Edit Deck")
+
+                card_numbers = edited_deck.select_card("Which cards would you like to delete? To exit, unselect all cards and hit enter\n", true)
                 
-                card_numbers = prompt.multi_select("Which cards would you like to delete? To exit, unselect all cards and hit enter\n", per_page: 8, cycle: true, echo: false) do |menu|
-                  menu.enum "."
-                  count = 0
-                  for card in edited_deck.cards
-                    menu.choice({card[:question] => count})
-                    count += 1
-                  end
-                end
 
                 if card_numbers.length == 0
                   system "clear"
