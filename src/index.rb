@@ -119,8 +119,7 @@ begin
       finished_adding_cards = false
       until finished_adding_cards
         puts font.write("Add Deck")
-        new_card = create_card(new_deck)
-        new_deck.add_card(new_card)
+        new_deck.add_card
 
         add_another_card_prompt_open = true
         while add_another_card_prompt_open
@@ -196,8 +195,8 @@ begin
             # ADD NEW CARD TO EXISTING DECK #
             system "clear"
             puts font.write("Edit Deck")
-            new_card = create_card(edited_deck)
-            edited_deck.add_card(new_card)
+
+            edited_deck.add_card
 
             database[deck] = edited_deck.return_deck
             database = Database.update_database(database)
@@ -253,9 +252,12 @@ begin
                   system "clear"
                   puts font.write("Edit Deck")
 
-                  edited_card = edit_card_text("question", card_number, edited_deck.cards[card_number][:question])
-                  edited_deck.edit_card("question", edited_card, card_number)
+                  # edited_card = edit_card_text("question", card_number, edited_deck.cards[card_number][:question])
+                  # edited_deck.edit_card("question", edited_card, card_number)
 
+                  edited_deck.edit_card("question", card_number)
+
+                  database[deck] = edited_deck.return_deck
                   database = Database.update_database(database)
                   system "clear"
                   next
@@ -264,9 +266,9 @@ begin
                   system "clear"
                   puts font.write("Edit Deck")
 
-                  edited_card = edit_card_text("answer", card_number, edited_deck.cards[card_number][:question])
-                  edited_deck.edit_card("answer", edited_card, card_number)
+                  edited_deck.edit_card("answer", card_number)
 
+                  database[deck] = edited_deck.return_deck
                   database = Database.update_database(database)
                   system "clear"
                 when "Exit"
@@ -295,6 +297,7 @@ begin
 
               while deleting_cards
                 puts font.write("Edit Deck")
+                
                 card_numbers = prompt.multi_select("Which cards would you like to delete? To exit, unselect all cards and hit enter\n", per_page: 8, cycle: true, echo: false) do |menu|
                   menu.enum "."
                   count = 0

@@ -7,17 +7,33 @@ class Deck
     @cards = cards
   end
 
-  def add_card(card)
-    @cards.push(card)
+  def add_card
+    prompt = TTY::Prompt.new
+  
+    puts "Deck: #{@title}"
+    puts "\n\n"
+    puts "Card #{@cards.length + 1}"
+    puts "\n\n"
+    question = prompt.ask("Enter the question:")
+    answer = prompt.ask("Enter the answer:")
+
+    @cards.push({ question: question, answer: answer })
     return @cards
   end
 
-  def edit_card(what_to_edit, changes, index)
-    case what_to_edit
+  def edit_card(type, card_number)
+    prompt = TTY::Prompt.new
+    puts "Card #{card_number + 1}:"
+    puts "\n"
+    puts "#{type.capitalize}: #{@cards[card_number][type.to_sym]}"
+    puts "\n"
+    text = prompt.ask("Enter a new #{type}:")
+
+    case type
     when "question"
-      @cards[index][:question] = changes
+      @cards[card_number][:question] = text
     when "answer"
-      @cards[index][:answer] = changes
+      @cards[card_number][:answer] = text
     else
       return nil
     end
@@ -37,4 +53,3 @@ class Deck
     return { title: @title, cards: @cards }
   end
 end
-
