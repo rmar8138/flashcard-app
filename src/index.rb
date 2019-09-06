@@ -76,17 +76,10 @@ begin
 
       while review_menu_open
         puts font.write("Review")
-        deck = prompt.select("Which deck would you like to review?", per_page: 8, cycle: true) do |menu|
-          menu.enum "."
-          count = 0
-          for deck in database
-            menu.choice({deck[:title] => count})
-            count += 1
-          end
-          menu.choice("Return to menu")
-        end
 
-        if deck == "Return to menu"
+        deck = Database.select_deck("Which deck would you like to review? Select last option 'Exit' to return to menu")
+
+        if deck == "Exit"
           system "clear"
           review_menu_open = false
           next
@@ -161,16 +154,9 @@ begin
 
       while edit_menu_open
         puts font.write("Edit Deck")
-        deck = prompt.select("Which deck would you like to review? (Select last option 'Exit' to return to menu)\n", per_page: 8, cycle: true) do |menu|
-          menu.enum "."
-          count = 0
-          for deck in database
-            menu.choice({deck[:title] => count})
-            count += 1
-          end
-          menu.choice("Exit")
-        end
 
+        deck = Database.select_deck("Which deck would you like to review? Select last option 'Exit' to return to menu")
+        p deck
         if deck == "Exit"
           system "clear"
           edit_menu_open = false
