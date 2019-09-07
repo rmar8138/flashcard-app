@@ -126,7 +126,10 @@ begin
         while add_another_card_prompt_open
           add_another = prompt.select(
             "Add another card?", 
-            [{ Yes: true }, { No: false }], 
+            [
+              { Yes: true }, 
+              { No: false }
+            ], 
             cycle: true
           )
 
@@ -297,7 +300,10 @@ begin
                 else
                   delete_card = prompt.select(
                     "Are you sure you want to delete this/these card(s)", 
-                    [{ Yes: true }, { No: false }], 
+                    [
+                      { Yes: true }, 
+                      { No: false }
+                    ], 
                     cycle: true
                   )
 

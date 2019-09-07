@@ -21,7 +21,7 @@ class Deck
         menu.enum "."
         count = 0
         for card in @cards
-          menu.choice({card[:question] => count})
+          menu.choice( {card[:question] => count} )
           count += 1
         end
       end
@@ -35,7 +35,7 @@ class Deck
         menu.enum "."
         count = 0
         for card in @cards
-          menu.choice({card[:question] => count})
+          menu.choice( {card[:question] => count} )
           count += 1
         end
         menu.choice("Exit")

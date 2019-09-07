@@ -38,7 +38,7 @@ module Database
       menu.enum "."
       count = 0
       for deck in self.get
-        menu.choice({deck[:title] => count})
+        menu.choice({ deck[:title] => count })
         count += 1
       end
       menu.choice("Exit")

@@ -27,8 +27,10 @@ class Review
         padding: 3, 
         width: 30, 
         height: 10, 
-        title: {top_left: "#{@deck[:title]}", 
-        bottom_right: "Question"}
+        title: {
+          top_left: "#{@deck[:title]}", 
+          bottom_right: "Question"
+        }
       ) do
         shuffled_deck[@current_card][:question]
       end
@@ -38,8 +40,10 @@ class Review
         padding: 3, 
         width: 30,
         height: 10, 
-        title: {top_left: "#{@deck[:title]}", 
-        bottom_right: "Answer"}
+        title: {
+          top_left: "#{@deck[:title]}", 
+          bottom_right: "Answer"
+        }
       ) do
         shuffled_deck[@current_card][:answer]
       end
@@ -48,7 +52,11 @@ class Review
       puts "\n"
       puts question_box
       puts "\n\n"
-      review_options = ["Show Answer", "Skip Card", "Exit"]
+      review_options = [
+        "Show Answer", 
+        "Skip Card",
+         "Exit"
+        ]
       
       option = prompt.select(
         "Would you like to show answer, skip card or exit?", 
@@ -130,9 +138,11 @@ class Review
     prompt = TTY::Prompt.new
     table = TTY::Table.new(
       ["Stats","Total"], 
-      [["Score", "#{@score}/#{@deck[:cards].length}"], 
-      ["Number of skips", " #{@number_of_skips}"], 
-      ["Incorrect cards", "#{@number_of_incorrect_cards}"]]
+      [
+        ["Score", "#{@score}/#{@deck[:cards].length}"], 
+        ["Number of skips", " #{@number_of_skips}"], 
+        ["Incorrect cards", "#{@number_of_incorrect_cards}"]
+      ]
     )
     font = TTY::Font.new(:standard)
     puts font.write("Stats")
