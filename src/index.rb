@@ -5,10 +5,13 @@ require "tty-table"
 require_relative "./classes/Deck"
 require_relative "./classes/Review"
 require_relative "./modules/Database"
+require_relative "./modules/Settings"
 
 
-begin
+# begin
   database = Database.get
+  settings = Settings.get
+
   prompt = TTY::Prompt.new
   # QUICK REVIEW #
   # Users can do a quick review if they know the name of the deck they want to review
@@ -36,9 +39,7 @@ begin
     end
   end
 
-  welcome_menu_open = true
-
-  while welcome_menu_open
+  while true
     ##################
     # WELCOME SCREEN #
     ##################
@@ -51,7 +52,7 @@ begin
     else
       puts font.write("Flashcard App")
     end
-
+    
     puts "Welcome to the terminal flash card app!"
     puts "\n"
     input = prompt.select(
@@ -74,29 +75,28 @@ begin
       system "clear"
 
       review_menu_open = true
-      if database.length == 0
-        system "clear"
-        puts "No decks to review! Please make a deck first"
-        puts "\n"
-        review_menu_open = false
-        next
-      end
 
-      while review_menu_open
+      while true
         puts font.write("Review")
+        if database.length == 0
+          puts "No decks to review! Please make a deck first"
+          prompt.keypress("Press any key to return")
+          puts "\n"
+          break
+        end
+
         deck = Database.select_deck("Which deck would you like to review? Select last option 'Exit' to return to menu")
 
         if deck == "Exit"
           system "clear"
-          review_menu_open = false
-          next
+          break
         end
 
         # START REVIEW! #
         review = Review.new(database[deck])
         review.start_review
         review_menu_open = false
-        next
+        break
       end
 
 
@@ -120,10 +120,8 @@ begin
       until finished_adding_cards
         puts font.write("Add Deck")
         new_deck.add_card
-
-        add_another_card_prompt_open = true
         
-        while add_another_card_prompt_open
+        while true
           add_another = prompt.select(
             "Add another card?", 
             [
@@ -136,10 +134,11 @@ begin
           case add_another
           when true
             system "clear"
-            add_another_card_prompt_open = false
+            break
           when false
-            add_another_card_prompt_open = false
+            system "clear"
             finished_adding_cards = true
+            break
             system "clear"
           else
             puts "Invalid input"
@@ -176,9 +175,8 @@ begin
 
         system "clear"
         edited_deck = Deck.new(database[deck][:title], database[deck][:cards])
-        editing_deck = true
 
-        while editing_deck
+        while true
           puts font.write("Edit Deck")
           puts "Deck: #{edited_deck.title}"
           puts "Cards: #{edited_deck.cards.length} card(s)"
@@ -231,9 +229,8 @@ begin
               next
             else
               system "clear"
-              user_editing_card = true
 
-              while user_editing_card
+              while true
                 puts font.write("Edit Deck")
                 puts "Card #{card_number + 1}"
                 puts "\n"
@@ -263,10 +260,10 @@ begin
                   database[deck] = edited_deck.return_deck
                   database = Database.update_database(database)
                   system "clear"
+                  next
                 when "Exit"
                   system "clear"
-                  user_editing_card = false
-                  next
+                  break
                 else
                   system "clear"
                   puts "Invalid input"
@@ -284,9 +281,8 @@ begin
               next
             else
               system "clear"
-              deleting_cards = true
 
-              while deleting_cards
+              while true
                 puts font.write("Edit Deck")
                 card_numbers = edited_deck.select_card(
                   "Which cards would you like to delete? To exit, unselect all cards and hit enter\n", 
@@ -295,8 +291,7 @@ begin
                 
                 if card_numbers.length == 0
                   system "clear"
-                  deleting_cards = false
-                  next
+                  break
                 else
                   delete_card = prompt.select(
                     "Are you sure you want to delete this/these card(s)", 
@@ -313,12 +308,10 @@ begin
                     database[deck] = edited_deck.return_deck
                     database = Database.update_database(database)
                     system "clear"
-                    deleting_cards = false
-                    next
+                    break
                   else
                     system "clear"
-                    deleting_cards = false
-                    next
+                    break
                   end
                 end
               end
@@ -345,17 +338,21 @@ begin
             puts font.write("Edit Deck")
             puts "Deck: #{edited_deck.title}"
             puts "\n"
-            option = prompt.select("Are you sure you want to delete this deck?", 
-              [{ Yes: true }, { No: false }], 
-              cycle: true)
+            option = prompt.select(
+              "Are you sure you want to delete this deck?", 
+              [
+                { Yes: true }, 
+                { No: false }
+              ], 
+              cycle: true
+            )
 
             case option
             when true
               database.delete_at(deck)
               database = Database.update_database(database)
               system "clear"
-              editing_deck = false
-              next
+              break
             when false
               system "clear"
               next
@@ -366,8 +363,7 @@ begin
             end
           when "Exit"
             system "clear"
-            editing_deck = false
-            next
+            break
           else
             system "clear"
             puts "Invalid input"
@@ -381,18 +377,118 @@ begin
       ############
       # SETTINGS #
       ############
-      system "clear"
-      puts font.write("Settings")
-      puts "Settings! Coming soon..."
-      prompt.keypress("Press any key to return to menu")
+
+      while true
+        system "clear"
+        puts font.write("Settings")
+        # puts "Settings! Coming soon..."
+        # prompt.keypress("Press any key to return to menu")
+  
+        # Timed reviews
+        # Shuffle deck or ordered deck
+        settings_options = [
+          "Shuffle/Ordered deck review", 
+          "Timed reviews",
+          "Exit"
+        ]
+        option = prompt.select(
+          "Select a setting:", 
+          settings_options, 
+          cycle: true, 
+          echo: false
+        )
+  
+        case option
+        when "Shuffle/Ordered deck review"
+          while true
+            # COLORIZE THE PRE SELECTED DEFAULT #
+            system "clear"
+            puts font.write("Settings")
+            puts "\n"
+            current_setting = settings[:shuffled_reviews] ? "Shuffled" : "Ordered"
+            option = prompt.select(
+              "Select between shuffled or ordered deck reviews:\n(Current setting: #{current_setting})",
+              [
+                "Shuffled",
+                "Ordered",
+                "Exit"
+              ],
+              cycle: true,
+              echo: false
+            )
+  
+            case option
+            when "Shuffled"
+              # save to settings.json
+              settings[:shuffled_reviews] = true
+              Settings.update_settings(settings)
+              next
+            when "Ordered"
+              # save to settings.json
+              settings[:shuffled_reviews] = false
+              Settings.update_settings(settings)
+              next
+            when "Exit"
+              break
+            else
+              system "clear"
+              puts "Invalid input"
+              next
+            end
+          end
+
+        when "Timed reviews"
+
+          while true
+            # COLORIZE THE PRE SELECTED DEFAULT #
+            system "clear"
+            puts font.write("Settings")
+            puts "\n"
+            current_setting = settings[:timed_reviews] ? "Timed" : "Untimed"
+            option = prompt.select(
+              "Select between timed reviews or untimed reviews:\n(Current setting: #{current_setting})",
+              [
+                "Timed",
+                "Untimed",
+                "Exit"
+              ],
+              cycle: true,
+              echo: false
+            )
+  
+            case option
+            when "Timed"
+              # save to settings.json
+              settings[:timed_reviews] = true
+              Settings.update_settings(settings)
+              next
+            when "Untimed"
+              # save to settings.json
+              settings[:timed_reviews] = false
+              Settings.update_settings(settings)
+              next
+            when "Exit"
+              break
+            else
+              system "clear"
+              puts "Invalid input"
+              next
+            end
+          end
+        when "Exit"
+          break
+        else
+          system "clear"
+          puts "Invalid input"
+          next
+        end
+      end
       system "clear"
       next
     when "Exit"
       system "clear"
       puts font.write("Cya!")
-
-      welcome_menu_open = false
-      next
+      break
     else
       system "clear"
       p input
@@ -402,10 +498,10 @@ begin
   end
 
   pid = fork{ exec "killall afplay" } if ARGV[0] == "--kahoot"
-rescue => exception
-  # If the database.json file is empty, the program will not be able to load in the database
-  # This displays an error message instead of crashing the program
-  puts "Ooops, there was an error :("
-  puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
-  puts "If you do have an empty JSON file, delete that file and try again!"
-end
+# rescue => exception
+#   # If the database.json file is empty, the program will not be able to load in the database
+#   # This displays an error message instead of crashing the program
+#   puts "Ooops, there was an error :("
+#   puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
+#   puts "If you do have an empty JSON file, delete that file and try again!"
+# end
