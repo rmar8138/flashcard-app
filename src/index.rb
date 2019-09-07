@@ -5,10 +5,13 @@ require "tty-table"
 require_relative "./classes/Deck"
 require_relative "./classes/Review"
 require_relative "./modules/Database"
+require_relative "./modules/Settings"
 
 
-begin
+# begin
   database = Database.get
+  settings = Settings.get
+
   prompt = TTY::Prompt.new
   # QUICK REVIEW #
   # Users can do a quick review if they know the name of the deck they want to review
@@ -51,7 +54,7 @@ begin
     else
       puts font.write("Flashcard App")
     end
-
+    
     puts "Welcome to the terminal flash card app!"
     puts "\n"
     input = prompt.select(
@@ -345,9 +348,14 @@ begin
             puts font.write("Edit Deck")
             puts "Deck: #{edited_deck.title}"
             puts "\n"
-            option = prompt.select("Are you sure you want to delete this deck?", 
-              [{ Yes: true }, { No: false }], 
-              cycle: true)
+            option = prompt.select(
+              "Are you sure you want to delete this deck?", 
+              [
+                { Yes: true }, 
+                { No: false }
+              ], 
+              cycle: true
+            )
 
             case option
             when true
@@ -381,10 +389,114 @@ begin
       ############
       # SETTINGS #
       ############
-      system "clear"
-      puts font.write("Settings")
-      puts "Settings! Coming soon..."
-      prompt.keypress("Press any key to return to menu")
+
+      while true
+        system "clear"
+        puts font.write("Settings")
+        # puts "Settings! Coming soon..."
+        # prompt.keypress("Press any key to return to menu")
+  
+        # Timed reviews
+        # Shuffle deck or ordered deck
+        settings_options = [
+          "Shuffle/Ordered deck review", 
+          "Timed reviews",
+          "Exit"
+        ]
+        option = prompt.select(
+          "Select a setting:", 
+          settings_options, 
+          cycle: true, 
+          echo: false
+        )
+  
+        case option
+        when "Shuffle/Ordered deck review"
+          while true
+            # COLORIZE THE PRE SELECTED DEFAULT #
+            system "clear"
+            puts font.write("Settings")
+            puts "\n"
+            current_setting = settings[:shuffled_reviews] ? "Shuffled" : "Ordered"
+            option = prompt.select(
+              "Select between shuffled or ordered deck reviews:\n(Current setting: #{current_setting})",
+              [
+                "Shuffled",
+                "Ordered",
+                "Exit"
+              ],
+              cycle: true,
+              echo: false
+            )
+  
+            case option
+            when "Shuffled"
+              # save to settings.json
+              settings[:shuffled_reviews] = true
+              Settings.update_settings(settings)
+              next
+            when "Ordered"
+              # save to settings.json
+              settings[:shuffled_reviews] = false
+              Settings.update_settings(settings)
+              next
+            when "Exit"
+              break
+            else
+              system "clear"
+              puts "Invalid input"
+              next
+            end
+          end
+
+        when "Timed reviews"
+
+          while true
+            # COLORIZE THE PRE SELECTED DEFAULT #
+            system "clear"
+            puts font.write("Settings")
+            puts "\n"
+            current_setting = settings[:timed_reviews] ? "Timed" : "Untimed"
+            option = prompt.select(
+              "Select between timed reviews or untimed reviews:\n(Current setting: #{current_setting})",
+              [
+                "Timed",
+                "Untimed",
+                "Exit"
+              ],
+              cycle: true,
+              echo: false
+            )
+  
+            case option
+            when "Timed"
+              # save to settings.json
+              settings[:timed_reviews] = true
+              Settings.update_settings(settings)
+              next
+            when "Untimed"
+              # save to settings.json
+              settings[:timed_reviews] = false
+              Settings.update_settings(settings)
+              next
+            when "Exit"
+              break
+            else
+              system "clear"
+              puts "Invalid input"
+              next
+            end
+          end
+        when "Exit"
+          break
+        else
+          system "clear"
+          puts "Invalid input"
+          next
+        end
+      end
+
+
       system "clear"
       next
     when "Exit"
@@ -402,10 +514,10 @@ begin
   end
 
   pid = fork{ exec "killall afplay" } if ARGV[0] == "--kahoot"
-rescue => exception
-  # If the database.json file is empty, the program will not be able to load in the database
-  # This displays an error message instead of crashing the program
-  puts "Ooops, there was an error :("
-  puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
-  puts "If you do have an empty JSON file, delete that file and try again!"
-end
+# rescue => exception
+#   # If the database.json file is empty, the program will not be able to load in the database
+#   # This displays an error message instead of crashing the program
+#   puts "Ooops, there was an error :("
+#   puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
+#   puts "If you do have an empty JSON file, delete that file and try again!"
+# end
