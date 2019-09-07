@@ -39,9 +39,7 @@ require_relative "./modules/Settings"
     end
   end
 
-  welcome_menu_open = true
-
-  while welcome_menu_open
+  while true
     ##################
     # WELCOME SCREEN #
     ##################
@@ -77,29 +75,28 @@ require_relative "./modules/Settings"
       system "clear"
 
       review_menu_open = true
-      if database.length == 0
-        system "clear"
-        puts "No decks to review! Please make a deck first"
-        puts "\n"
-        review_menu_open = false
-        next
-      end
 
-      while review_menu_open
+      while true
         puts font.write("Review")
+        if database.length == 0
+          puts "No decks to review! Please make a deck first"
+          prompt.keypress("Press any key to return")
+          puts "\n"
+          break
+        end
+
         deck = Database.select_deck("Which deck would you like to review? Select last option 'Exit' to return to menu")
 
         if deck == "Exit"
           system "clear"
-          review_menu_open = false
-          next
+          break
         end
 
         # START REVIEW! #
         review = Review.new(database[deck])
         review.start_review
         review_menu_open = false
-        next
+        break
       end
 
 
@@ -123,10 +120,8 @@ require_relative "./modules/Settings"
       until finished_adding_cards
         puts font.write("Add Deck")
         new_deck.add_card
-
-        add_another_card_prompt_open = true
         
-        while add_another_card_prompt_open
+        while true
           add_another = prompt.select(
             "Add another card?", 
             [
@@ -139,10 +134,11 @@ require_relative "./modules/Settings"
           case add_another
           when true
             system "clear"
-            add_another_card_prompt_open = false
+            break
           when false
-            add_another_card_prompt_open = false
+            system "clear"
             finished_adding_cards = true
+            break
             system "clear"
           else
             puts "Invalid input"
@@ -179,9 +175,8 @@ require_relative "./modules/Settings"
 
         system "clear"
         edited_deck = Deck.new(database[deck][:title], database[deck][:cards])
-        editing_deck = true
 
-        while editing_deck
+        while true
           puts font.write("Edit Deck")
           puts "Deck: #{edited_deck.title}"
           puts "Cards: #{edited_deck.cards.length} card(s)"
@@ -234,9 +229,8 @@ require_relative "./modules/Settings"
               next
             else
               system "clear"
-              user_editing_card = true
 
-              while user_editing_card
+              while true
                 puts font.write("Edit Deck")
                 puts "Card #{card_number + 1}"
                 puts "\n"
@@ -266,10 +260,10 @@ require_relative "./modules/Settings"
                   database[deck] = edited_deck.return_deck
                   database = Database.update_database(database)
                   system "clear"
+                  next
                 when "Exit"
                   system "clear"
-                  user_editing_card = false
-                  next
+                  break
                 else
                   system "clear"
                   puts "Invalid input"
@@ -287,9 +281,8 @@ require_relative "./modules/Settings"
               next
             else
               system "clear"
-              deleting_cards = true
 
-              while deleting_cards
+              while true
                 puts font.write("Edit Deck")
                 card_numbers = edited_deck.select_card(
                   "Which cards would you like to delete? To exit, unselect all cards and hit enter\n", 
@@ -298,8 +291,7 @@ require_relative "./modules/Settings"
                 
                 if card_numbers.length == 0
                   system "clear"
-                  deleting_cards = false
-                  next
+                  break
                 else
                   delete_card = prompt.select(
                     "Are you sure you want to delete this/these card(s)", 
@@ -316,12 +308,10 @@ require_relative "./modules/Settings"
                     database[deck] = edited_deck.return_deck
                     database = Database.update_database(database)
                     system "clear"
-                    deleting_cards = false
-                    next
+                    break
                   else
                     system "clear"
-                    deleting_cards = false
-                    next
+                    break
                   end
                 end
               end
@@ -362,8 +352,7 @@ require_relative "./modules/Settings"
               database.delete_at(deck)
               database = Database.update_database(database)
               system "clear"
-              editing_deck = false
-              next
+              break
             when false
               system "clear"
               next
@@ -374,8 +363,7 @@ require_relative "./modules/Settings"
             end
           when "Exit"
             system "clear"
-            editing_deck = false
-            next
+            break
           else
             system "clear"
             puts "Invalid input"
@@ -495,16 +483,12 @@ require_relative "./modules/Settings"
           next
         end
       end
-
-
       system "clear"
       next
     when "Exit"
       system "clear"
       puts font.write("Cya!")
-
-      welcome_menu_open = false
-      next
+      break
     else
       system "clear"
       p input
