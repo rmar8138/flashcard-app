@@ -3,7 +3,10 @@ require "tty-box"
 require "tty-table"
 require "tty-font"
 
+require_relative "../modules/Settings"
+
 class Review
+  include Settings
   attr_accessor :deck
 
   def initialize(deck)
@@ -16,11 +19,12 @@ class Review
 
   def start_review(deck = @deck[:cards], first_review = true)
     prompt = TTY::Prompt.new
-    
-    shuffled_deck = deck.shuffle
+    review_deck = deck
     review_after_deck = []
 
-    while @current_card < shuffled_deck.length
+    review_deck = deck.shuffle if Settings.get[:shuffled_reviews]
+
+    while @current_card < review_deck.length
       system "clear"
       question_box = TTY::Box.frame(
         align: :center, 
@@ -32,7 +36,7 @@ class Review
           bottom_right: "Question"
         }
       ) do
-        shuffled_deck[@current_card][:question]
+        review_deck[@current_card][:question]
       end
 
       answer_box = TTY::Box.frame(
@@ -45,7 +49,7 @@ class Review
           bottom_right: "Answer"
         }
       ) do
-        shuffled_deck[@current_card][:answer]
+        review_deck[@current_card][:answer]
       end
 
       puts "Deck: #{@deck[:title]}"
@@ -91,7 +95,7 @@ class Review
         when "Incorrect"
           # add card to review_after deck #
           @number_of_incorrect_cards += 1
-          review_after_deck.push(shuffled_deck[@current_card])
+          review_after_deck.push(review_deck[@current_card])
           user_viewing_answer = false
           system "clear"
           next
@@ -109,8 +113,8 @@ class Review
       when "Skip Card"
         # Move card to back of pile
         @number_of_skips += 1
-        skipped_card = shuffled_deck.slice!(@current_card)
-        shuffled_deck.push(skipped_card)
+        skipped_card = review_deck.slice!(@current_card)
+        review_deck.push(skipped_card)
         system "clear"
         next
       when "Exit"
