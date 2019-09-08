@@ -8,7 +8,7 @@ require_relative "./modules/Database"
 require_relative "./modules/Settings"
 
 
-# begin
+begin
   database = Database.get
   settings = Settings.get
 
@@ -498,10 +498,10 @@ require_relative "./modules/Settings"
   end
 
   pid = fork{ exec "killall afplay" } if ARGV[0] == "--kahoot"
-# rescue => exception
-#   # If the database.json file is empty, the program will not be able to load in the database
-#   # This displays an error message instead of crashing the program
-#   puts "Ooops, there was an error :("
-#   puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
-#   puts "If you do have an empty JSON file, delete that file and try again!"
-# end
+rescue => exception
+  # If the database.json file is empty, the program will not be able to load in the database
+  # This displays an error message instead of crashing the program
+  puts "Ooops, there was an error :("
+  puts "There could be something wrong with the database file, maybe you have an empty database.json file?"
+  puts "If you do have an empty JSON file, delete that file and try again!"
+end
